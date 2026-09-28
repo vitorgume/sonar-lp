@@ -1,0 +1,137 @@
+---
+import Sparkles from '@lucide/astro/icons/sparkles';
+import Play from '@lucide/astro/icons/play';
+import FileText from '@lucide/astro/icons/file-text';
+
+interface Kpi {
+  label: string;
+  value: string;
+  tone: 'emerald' | 'amber' | 'slate';
+}
+
+interface Objection {
+  category: string;
+  handled: boolean;
+}
+
+const score = 64;
+const circumference = 2 * Math.PI * 42;
+const scoreDash = (score / 100) * circumference;
+
+const kpis: Kpi[] = [
+  { label: 'Fala do vendedor', value: '68%', tone: 'amber' },
+  { label: 'Sentimento do cliente', value: 'Positivo', tone: 'emerald' },
+  { label: 'Intenção de compra', value: 'Alta', tone: 'emerald' },
+  { label: 'Velocidade de fala', value: 'Rápida', tone: 'amber' },
+];
+
+const objections: Objection[] = [
+  { category: 'Preço', handled: true },
+  { category: 'Decisor', handled: false },
+];
+
+const toneClasses: Record<Kpi['tone'], string> = {
+  emerald: 'bg-emerald-50 text-emerald-700',
+  amber: 'bg-amber-50 text-amber-700',
+  slate: 'bg-slate-100 text-slate-700',
+};
+---
+
+<figure class="relative">
+  <div class="overflow-hidden rounded-xl border border-slate-200 bg-white shadow-lg">
+    <div class="flex items-center justify-between gap-4 border-b border-slate-200 bg-slate-50 px-5 py-3">
+      <div class="flex items-center gap-1.5" aria-hidden="true">
+        <span class="h-2.5 w-2.5 rounded-full bg-slate-300"></span>
+        <span class="h-2.5 w-2.5 rounded-full bg-slate-300"></span>
+        <span class="h-2.5 w-2.5 rounded-full bg-slate-300"></span>
+      </div>
+      <p class="truncate text-xs font-medium text-slate-500">Relatório da ligação · Closer</p>
+    </div>
+
+    <div class="grid gap-6 p-5 sm:p-6 md:grid-cols-[auto_1fr]">
+      <div class="flex items-center gap-4 md:flex-col md:items-center md:gap-2">
+        <svg class="h-24 w-24 shrink-0 -rotate-90" viewBox="0 0 100 100" role="img" aria-label={`Nota final ${score} de 100`}>
+          <circle cx="50" cy="50" r="42" fill="none" stroke="#e2e8f0" stroke-width="9"></circle>
+          <circle
+            cx="50"
+            cy="50"
+            r="42"
+            fill="none"
+            stroke="#f59e0b"
+            stroke-width="9"
+            stroke-linecap="round"
+            stroke-dasharray={`${scoreDash} ${circumference}`}
+          ></circle>
+          <text x="50" y="50" transform="rotate(90 50 50)" text-anchor="middle" dominant-baseline="central" class="fill-slate-900 text-[26px] font-semibold">{score}</text>
+        </svg>
+        <div class="md:text-center">
+          <p class="text-sm font-medium text-slate-500">Nota final</p>
+          <p class="text-xs text-slate-400">Diagnóstico · 17:42</p>
+        </div>
+      </div>
+
+      <div class="min-w-0">
+        <dl class="grid grid-cols-2 gap-3">
+          {kpis.map((kpi) => (
+            <div class="rounded-lg border border-slate-200 p-3">
+              <dt class="text-xs font-medium text-slate-500">{kpi.label}</dt>
+              <dd class="mt-1">
+                <span class:list={['inline-flex rounded-md px-2 py-0.5 text-sm font-semibold', toneClasses[kpi.tone]]}>{kpi.value}</span>
+              </dd>
+            </div>
+          ))}
+        </dl>
+
+        <div class="mt-4 flex flex-wrap items-center gap-2">
+          <span class="text-xs font-medium text-slate-500">Objeções:</span>
+          {objections.map((objection) => (
+            <span
+              class:list={[
+                'inline-flex items-center gap-1 rounded-md px-2 py-0.5 text-xs font-semibold',
+                objection.handled ? 'bg-emerald-50 text-emerald-700' : 'bg-rose-50 text-rose-700',
+              ]}
+            >
+              {objection.category} · {objection.handled ? 'contornada' : 'não tratada'}
+            </span>
+          ))}
+        </div>
+      </div>
+    </div>
+
+    <div class="mx-5 mb-5 rounded-lg bg-sky-100 p-4 text-sky-800 sm:mx-6">
+      <p class="flex items-center gap-2 text-sm font-semibold">
+        <Sparkles class="h-4 w-4" aria-hidden="true" /> Análise da Inteligência Artificial
+      </p>
+      <p class="mt-2 text-sm leading-relaxed">
+        O vendedor ofereceu 15% de desconto antes de o cliente pedir, contrariando a regra R3 do playbook. O cliente
+        citou o sócio como decisor e a call terminou sem próximo passo agendado.
+      </p>
+      <p class="mt-3 inline-flex items-center gap-1.5 rounded-md bg-white/70 px-2 py-1 text-xs font-medium text-sky-800">
+        <FileText class="h-3.5 w-3.5" aria-hidden="true" /> Base utilizada: Playbook Comercial · R3
+      </p>
+    </div>
+
+    <div class="border-t border-slate-200 px-5 py-4 sm:px-6">
+      <div class="flex items-center gap-3">
+        <span class="flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-teal-600 text-white" aria-hidden="true">
+          <Play class="h-3.5 w-3.5 translate-x-px" />
+        </span>
+        <div class="h-1.5 flex-1 overflow-hidden rounded-full bg-slate-200" aria-hidden="true">
+          <div class="h-full w-1/4 rounded-full bg-teal-500"></div>
+        </div>
+        <span class="text-xs font-medium tabular-nums text-slate-500">04:12</span>
+      </div>
+      <ul class="mt-4 space-y-2 text-sm">
+        <li class="flex gap-3">
+          <span class="w-12 shrink-0 font-mono text-xs leading-5 text-slate-400">04:12</span>
+          <p><span class="font-semibold text-teal-700">Vendedor:</span> <span class="text-slate-600">Se fechar hoje, eu consigo 15% pra você.</span></p>
+        </li>
+        <li class="flex gap-3">
+          <span class="w-12 shrink-0 font-mono text-xs leading-5 text-slate-400">04:19</span>
+          <p><span class="font-semibold text-slate-900">Cliente:</span> <span class="text-slate-600">Legal... mas preciso ver com meu sócio antes.</span></p>
+        </li>
+      </ul>
+    </div>
+  </div>
+  <figcaption class="mt-3 text-center text-xs text-slate-400">Exemplo ilustrativo de relatório gerado pelo Sonar.</figcaption>
+</figure>

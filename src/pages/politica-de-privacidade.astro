@@ -1,0 +1,87 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import Header from '../components/Header.astro';
+import Footer from '../components/Footer.astro';
+import { site } from '../data/site';
+
+interface PolicySection {
+  title: string;
+  paragraphs: string[];
+}
+
+const lastUpdate = '28 de setembro de 2026';
+
+const sections: PolicySection[] = [
+  {
+    title: '1. Quem somos',
+    paragraphs: [
+      `Esta política explica como o ${site.legalName} ("Sonar", "nós") trata os dados pessoais coletados nesta página. Para qualquer assunto relacionado à privacidade, fale com a gente pelo e-mail ${site.privacyEmail}.`,
+    ],
+  },
+  {
+    title: '2. Quais dados coletamos',
+    paragraphs: [
+      'No formulário de contato: nome, e-mail, número de WhatsApp, empresa, cargo, tamanho do time comercial e, opcionalmente, o CRM que sua empresa utiliza.',
+      'Automaticamente: informações de origem da visita, como parâmetros de campanha (UTM), identificadores de clique de anúncios, página de entrada e página de referência. Se ferramentas de medição estiverem ativas, também podem ser coletados dados de navegação por meio de cookies.',
+    ],
+  },
+  {
+    title: '3. Para que usamos',
+    paragraphs: [
+      'Usamos os dados para entrar em contato com você, entender o contexto da sua operação comercial, agendar e realizar a demonstração do Sonar e enviar informações comerciais relacionadas ao produto.',
+      'As informações de origem da visita servem para medir o desempenho das nossas campanhas de marketing.',
+    ],
+  },
+  {
+    title: '4. Base legal',
+    paragraphs: [
+      'O tratamento dos dados do formulário se baseia no seu consentimento, fornecido ao marcar a caixa de aceite antes do envio, e em procedimentos preliminares relacionados a um possível contrato, conforme a Lei Geral de Proteção de Dados (Lei nº 13.709/2018).',
+    ],
+  },
+  {
+    title: '5. Compartilhamento',
+    paragraphs: [
+      'Não vendemos seus dados. Eles podem ser processados por fornecedores que nos ajudam a operar o atendimento comercial, como ferramentas de CRM, automação e medição de campanhas, sempre limitados à finalidade descrita nesta política.',
+    ],
+  },
+  {
+    title: '6. Por quanto tempo guardamos',
+    paragraphs: [
+      'Mantemos os dados enquanto houver relacionamento comercial ou interesse legítimo no contato, ou até que você solicite a exclusão, respeitadas as obrigações legais de guarda.',
+    ],
+  },
+  {
+    title: '7. Seus direitos',
+    paragraphs: [
+      `Você pode, a qualquer momento, pedir confirmação do tratamento, acesso, correção, anonimização, portabilidade ou exclusão dos seus dados, além de revogar o consentimento. Basta enviar um e-mail para ${site.privacyEmail}.`,
+    ],
+  },
+  {
+    title: '8. Atualizações',
+    paragraphs: ['Esta política pode ser atualizada. A data da última revisão fica sempre indicada no topo desta página.'],
+  },
+];
+---
+
+<BaseLayout
+  title="Política de Privacidade | Sonar"
+  description="Saiba como o Sonar coleta, usa e protege os dados pessoais enviados pelo formulário de contato, conforme a LGPD."
+>
+  <Header variant="page" />
+  <main class="mx-auto max-w-3xl px-4 py-16 sm:px-6 sm:py-20 lg:px-8">
+    <h1 class="text-3xl font-semibold tracking-tight text-slate-900 sm:text-4xl">Política de Privacidade</h1>
+    <p class="mt-3 text-sm font-medium text-slate-500">Última atualização: {lastUpdate}</p>
+
+    <div class="mt-10 space-y-10">
+      {sections.map((section) => (
+        <section>
+          <h2 class="text-lg font-semibold text-slate-900">{section.title}</h2>
+          {section.paragraphs.map((paragraph) => (
+            <p class="mt-3 leading-relaxed text-slate-600">{paragraph}</p>
+          ))}
+        </section>
+      ))}
+    </div>
+  </main>
+  <Footer variant="page" />
+</BaseLayout>

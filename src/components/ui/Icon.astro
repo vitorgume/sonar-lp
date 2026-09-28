@@ -1,0 +1,60 @@
+---
+import AudioLines from '@lucide/astro/icons/audio-lines';
+import BookX from '@lucide/astro/icons/book-x';
+import Briefcase from '@lucide/astro/icons/briefcase';
+import CircleQuestionMark from '@lucide/astro/icons/circle-question-mark';
+import Ear from '@lucide/astro/icons/ear';
+import FileHeadphone from '@lucide/astro/icons/file-headphone';
+import FileSearch from '@lucide/astro/icons/file-search';
+import Funnel from '@lucide/astro/icons/funnel';
+import Gauge from '@lucide/astro/icons/gauge';
+import GraduationCap from '@lucide/astro/icons/graduation-cap';
+import Headphones from '@lucide/astro/icons/headphones';
+import HeartHandshake from '@lucide/astro/icons/heart-handshake';
+import Library from '@lucide/astro/icons/library';
+import ListChecks from '@lucide/astro/icons/list-checks';
+import MessagesSquare from '@lucide/astro/icons/messages-square';
+import Radar from '@lucide/astro/icons/radar';
+import ShieldAlert from '@lucide/astro/icons/shield-alert';
+import SlidersHorizontal from '@lucide/astro/icons/sliders-horizontal';
+import Swords from '@lucide/astro/icons/swords';
+import Target from '@lucide/astro/icons/target';
+import UserRoundCheck from '@lucide/astro/icons/user-round-check';
+import Users from '@lucide/astro/icons/users';
+import type { IconName } from './icon-names';
+
+const icons: Record<IconName, typeof Users> = {
+  'audio-lines': AudioLines,
+  'book-x': BookX,
+  briefcase: Briefcase,
+  'circle-question-mark': CircleQuestionMark,
+  ear: Ear,
+  'file-headphone': FileHeadphone,
+  'file-search': FileSearch,
+  funnel: Funnel,
+  gauge: Gauge,
+  'graduation-cap': GraduationCap,
+  headphones: Headphones,
+  'heart-handshake': HeartHandshake,
+  library: Library,
+  'list-checks': ListChecks,
+  'messages-square': MessagesSquare,
+  radar: Radar,
+  'shield-alert': ShieldAlert,
+  'sliders-horizontal': SlidersHorizontal,
+  swords: Swords,
+  target: Target,
+  'user-round-check': UserRoundCheck,
+  users: Users,
+};
+
+interface Props {
+  name: IconName;
+  class?: string;
+}
+
+const { name, class: className = 'h-5 w-5' } = Astro.props;
+const Component = icons[name];
+---
+
+<Component class={className} aria-hidden="true" stroke-width={1.75} />

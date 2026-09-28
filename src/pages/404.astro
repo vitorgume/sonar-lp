@@ -1,0 +1,21 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import Header from '../components/Header.astro';
+import Footer from '../components/Footer.astro';
+import { ui } from '../styles/ui';
+---
+
+<BaseLayout
+  title="Página não encontrada | Sonar"
+  description="A página que você procurou não existe. Conheça o Sonar, a análise de ligações de vendas com IA."
+  noindex
+>
+  <Header variant="page" />
+  <main class="mx-auto flex max-w-xl flex-col items-center px-4 py-24 text-center sm:px-6">
+    <p class="text-sm font-semibold text-teal-700">Erro 404</p>
+    <h1 class="mt-3 text-3xl font-semibold tracking-tight text-slate-900">Essa página saiu do radar</h1>
+    <p class="mt-4 text-slate-500">O endereço pode ter mudado ou não existir mais.</p>
+    <a href="/" class:list={[ui.buttonPrimaryLg, 'mt-8']}>Conhecer o Sonar</a>
+  </main>
+  <Footer variant="page" />
+</BaseLayout>

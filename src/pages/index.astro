@@ -1,0 +1,46 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import Header from '../components/Header.astro';
+import Footer from '../components/Footer.astro';
+import MobileCtaBar from '../components/MobileCtaBar.astro';
+import Hero from '../components/sections/Hero.astro';
+import Integrations from '../components/sections/Integrations.astro';
+import Problem from '../components/sections/Problem.astro';
+import HowItWorks from '../components/sections/HowItWorks.astro';
+import Showcase from '../components/sections/Showcase.astro';
+import Features from '../components/sections/Features.astro';
+import Strategy from '../components/sections/Strategy.astro';
+import Audiences from '../components/sections/Audiences.astro';
+import MidCta from '../components/sections/MidCta.astro';
+import Faq from '../components/sections/Faq.astro';
+import FinalCta from '../components/sections/FinalCta.astro';
+import { site } from '../data/site';
+import { buildHomeStructuredData } from '../data/structured-data';
+
+const structuredData = buildHomeStructuredData(Astro.site ?? new URL(Astro.url.origin));
+---
+
+<BaseLayout title={site.title} description={site.description} path="/" structuredData={structuredData}>
+  <a
+    href="#conteudo"
+    class="sr-only focus:not-sr-only focus:fixed focus:top-3 focus:left-3 focus:z-50 focus:rounded-lg focus:bg-white focus:px-4 focus:py-2 focus:text-sm focus:font-medium focus:text-teal-700 focus:shadow-lg"
+  >
+    Pular para o conteúdo
+  </a>
+  <Header />
+  <main id="conteudo">
+    <Hero />
+    <Integrations />
+    <Problem />
+    <HowItWorks />
+    <Showcase />
+    <Features />
+    <Strategy />
+    <Audiences />
+    <MidCta />
+    <Faq />
+    <FinalCta />
+  </main>
+  <Footer />
+  <MobileCtaBar />
+</BaseLayout>

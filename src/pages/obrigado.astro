@@ -1,0 +1,95 @@
+---
+import CircleCheck from '@lucide/astro/icons/circle-check';
+import MessageCircle from '@lucide/astro/icons/message-circle';
+import BaseLayout from '../layouts/BaseLayout.astro';
+import Header from '../components/Header.astro';
+import Footer from '../components/Footer.astro';
+import { site } from '../data/site';
+import { ui } from '../styles/ui';
+
+interface NextStep {
+  title: string;
+  description: string;
+}
+
+const nextSteps: NextStep[] = [
+  {
+    title: 'Olhamos o seu contexto',
+    description: 'Nosso time confere o tamanho da operação e as ferramentas que vocês usam para preparar a conversa.',
+  },
+  {
+    title: 'Entramos em contato',
+    description: 'Um especialista do Sonar fala com você pelo WhatsApp ou e-mail informados para combinar o melhor horário.',
+  },
+  {
+    title: 'Demonstração guiada',
+    description: 'Mostramos a IA avaliando ligações, o Sales Enablement e o dashboard estratégico no contexto da sua operação.',
+  },
+];
+---
+
+<BaseLayout
+  title="Recebemos seus dados | Sonar"
+  description="Obrigado pelo interesse no Sonar. Em breve nosso time comercial entra em contato para agendar sua demonstração."
+  noindex
+>
+  <Header variant="page" />
+  <main class="mx-auto max-w-3xl px-4 py-16 sm:px-6 sm:py-24 lg:px-8">
+    <div class="text-center">
+      <span class="inline-flex h-14 w-14 items-center justify-center rounded-full bg-emerald-50 text-emerald-500">
+        <CircleCheck class="h-8 w-8" aria-hidden="true" />
+      </span>
+      <h1 class="mt-6 text-3xl font-semibold tracking-tight text-slate-900 text-balance sm:text-4xl">
+        <span data-greeting>Recebemos seus dados!</span>
+      </h1>
+      <p class="mx-auto mt-4 max-w-xl text-lg text-slate-500 text-pretty">
+        Obrigado pelo interesse no Sonar. Nosso time comercial vai entrar em contato para agendar a sua demonstração.
+      </p>
+    </div>
+
+    <ol class="mt-12 space-y-4">
+      {nextSteps.map((step, index) => (
+        <li class:list={[ui.card, 'flex gap-4']}>
+          <span class="flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-teal-600 text-sm font-semibold text-white" aria-hidden="true">
+            {index + 1}
+          </span>
+          <div>
+            <h2 class="text-base font-semibold text-slate-900">{step.title}</h2>
+            <p class="mt-1 text-sm leading-relaxed text-slate-500">{step.description}</p>
+          </div>
+        </li>
+      ))}
+    </ol>
+
+    <div class="mt-8 rounded-xl bg-sky-100 p-6 text-sky-800">
+      <h2 class="text-sm font-semibold">Dica para aproveitar melhor a demonstração</h2>
+      <p class="mt-2 text-sm leading-relaxed">
+        Se puder, separe o playbook ou o roteiro de vendas do time e pense em uma ligação que você gostaria de ver avaliada.
+        Isso ajuda nosso especialista a mostrar o Sonar com a cara da sua operação.
+      </p>
+    </div>
+
+    <div class="mt-10 flex flex-col items-center justify-center gap-3 sm:flex-row">
+      <a href={site.whatsappUrl} target="_blank" rel="noopener" class={ui.buttonPrimaryLg} data-cta="whatsapp-obrigado">
+        <MessageCircle class="h-5 w-5" aria-hidden="true" />
+        Adiantar pelo WhatsApp
+      </a>
+      <a href="/" class={ui.buttonSecondaryLg}>Voltar ao site</a>
+    </div>
+  </main>
+  <Footer variant="page" />
+</BaseLayout>
+
+<script>
+  import { FIRST_NAME_KEY } from '../scripts/storage-keys';
+
+  try {
+    const firstName = sessionStorage.getItem(FIRST_NAME_KEY);
+    const greeting = document.querySelector<HTMLElement>('[data-greeting]');
+    if (firstName && greeting) {
+      greeting.textContent = `Tudo certo, ${firstName}! Recebemos seus dados.`;
+    }
+  } catch {
+    // Sem acesso ao storage: mantém a saudação genérica.
+  }
+</script>

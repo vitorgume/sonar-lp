@@ -1,0 +1,78 @@
+---
+import Icon from '../ui/Icon.astro';
+import { strategy } from '../../data/content';
+
+interface ObjectionBar {
+  label: string;
+  share: number;
+}
+
+const bars: ObjectionBar[] = [
+  { label: 'Preço', share: 82 },
+  { label: 'Momento', share: 61 },
+  { label: 'Decisor', share: 47 },
+  { label: 'Concorrente', share: 35 },
+  { label: 'Confiança', share: 22 },
+];
+---
+
+<section aria-labelledby="estrategia-titulo" class="relative overflow-hidden bg-slate-900">
+  <div class="pointer-events-none absolute inset-0" aria-hidden="true">
+    <div class="absolute -right-40 -bottom-40 h-[36rem] w-[36rem] rounded-full bg-teal-500/10 blur-3xl"></div>
+    <svg class="absolute -top-32 -right-32 h-[40rem] w-[40rem] text-teal-400/10" viewBox="0 0 132 132" fill="none">
+      <circle cx="66" cy="66" r="24" stroke="currentColor" stroke-width="0.6"></circle>
+      <circle cx="66" cy="66" r="40" stroke="currentColor" stroke-width="0.6"></circle>
+      <circle cx="66" cy="66" r="56" stroke="currentColor" stroke-width="0.6"></circle>
+    </svg>
+  </div>
+
+  <div class="relative mx-auto grid max-w-7xl gap-14 px-4 py-20 sm:px-6 lg:grid-cols-2 lg:items-center lg:px-8 lg:py-28">
+    <div>
+      <p class="text-sm font-semibold uppercase tracking-wider text-teal-400">{strategy.eyebrow}</p>
+      <h2 id="estrategia-titulo" class="mt-3 text-3xl font-semibold tracking-tight text-white text-balance sm:text-4xl">
+        {strategy.title}
+      </h2>
+      <p class="mt-4 text-lg text-slate-400 text-pretty">{strategy.lead}</p>
+
+      <ul class="mt-10 grid gap-6 sm:grid-cols-2">
+        {strategy.questions.map((question) => (
+          <li class="rounded-xl border border-white/10 bg-white/5 p-5">
+            <span class="inline-flex h-10 w-10 items-center justify-center rounded-lg bg-teal-500/15 text-teal-300">
+              <Icon name={question.icon} />
+            </span>
+            <h3 class="mt-4 text-base font-semibold text-white">{question.title}</h3>
+            <p class="mt-1.5 text-sm leading-relaxed text-slate-400">{question.description}</p>
+          </li>
+        ))}
+      </ul>
+    </div>
+
+    <figure class="rounded-xl border border-white/10 bg-slate-800/60 p-6 shadow-lg backdrop-blur">
+      <div class="flex items-center justify-between gap-4">
+        <p class="text-sm font-semibold text-white">Ligações com cada objeção</p>
+        <span class="shrink-0 whitespace-nowrap rounded-md bg-white/10 px-2 py-0.5 text-xs font-medium text-slate-300">Últimos 90 dias</span>
+      </div>
+      <dl class="mt-6 space-y-4">
+        {bars.map((bar) => (
+          <div>
+            <div class="flex items-center justify-between text-sm">
+              <dt class="font-medium text-slate-300">{bar.label}</dt>
+              <dd class="tabular-nums text-slate-400">{bar.share}%</dd>
+            </div>
+            <div class="mt-1.5 h-2 overflow-hidden rounded-full bg-white/10" aria-hidden="true">
+              <div class="h-full rounded-full bg-linear-to-r from-teal-500 to-teal-300" style={`width: ${bar.share}%`}></div>
+            </div>
+          </div>
+        ))}
+      </dl>
+      <div class="mt-6 rounded-lg border border-sky-400/20 bg-sky-400/10 p-4">
+        <p class="text-xs font-semibold uppercase tracking-wider text-sky-300">O que mudou</p>
+        <p class="mt-1.5 text-sm leading-relaxed text-sky-100">
+          Neste período, "Momento" passou a aparecer junto de um concorrente em mais ligações de closer — sinal de que o
+          cliente está usando a espera para comparar propostas.
+        </p>
+      </div>
+      <figcaption class="mt-4 text-xs text-slate-500">Exemplo ilustrativo do dashboard estratégico.</figcaption>
+    </figure>
+  </div>
+</section>

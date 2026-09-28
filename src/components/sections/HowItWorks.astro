@@ -1,0 +1,29 @@
+---
+import { howItWorks } from '../../data/content';
+import { ui } from '../../styles/ui';
+---
+
+<section id="como-funciona" aria-labelledby="como-funciona-titulo" class="scroll-mt-20 bg-white">
+  <div class="mx-auto max-w-7xl px-4 py-20 sm:px-6 lg:px-8 lg:py-28">
+    <div class="mx-auto max-w-3xl text-center">
+      <p class={ui.eyebrow}>{howItWorks.eyebrow}</p>
+      <h2 id="como-funciona-titulo" class:list={[ui.sectionTitle, 'mt-3']}>{howItWorks.title}</h2>
+      <p class={ui.sectionLead}>{howItWorks.lead}</p>
+    </div>
+
+    <div class="relative mt-16">
+      <div class="pointer-events-none absolute top-6 right-[12.5%] left-[12.5%] hidden h-px bg-linear-to-r from-teal-200 via-teal-400 to-teal-200 lg:block" aria-hidden="true"></div>
+      <ol class="grid gap-10 md:grid-cols-2 lg:grid-cols-4 lg:gap-8">
+        {howItWorks.steps.map((step, index) => (
+          <li class="relative flex flex-col items-center text-center">
+            <span class="relative z-10 flex h-12 w-12 items-center justify-center rounded-full bg-teal-600 text-lg font-semibold text-white shadow-sm ring-8 ring-white" aria-hidden="true">
+              {index + 1}
+            </span>
+            <h3 class="mt-6 text-lg font-semibold text-slate-900">{step.title}</h3>
+            <p class="mt-2 max-w-xs text-sm leading-relaxed text-slate-500">{step.description}</p>
+          </li>
+        ))}
+      </ol>
+    </div>
+  </div>
+</section>

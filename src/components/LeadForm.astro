@@ -1,0 +1,190 @@
+---
+import ArrowRight from '@lucide/astro/icons/arrow-right';
+import LoaderCircle from '@lucide/astro/icons/loader-circle';
+import Lock from '@lucide/astro/icons/lock';
+import { leadForm } from '../data/content';
+import { ui } from '../styles/ui';
+
+interface Props {
+  /** Prefixo dos ids: a página tem mais de um formulário e os ids precisam ser únicos. */
+  idPrefix: string;
+  headingLevel?: 'h2' | 'h3';
+}
+
+const { idPrefix, headingLevel = 'h2' } = Astro.props;
+const id = (name: string): string => `${idPrefix}-${name}`;
+const Heading = headingLevel;
+---
+
+<div class="bg-white rounded-xl border border-slate-200 shadow-lg p-6 sm:p-8">
+  <Heading id={id('titulo')} class="text-xl font-semibold text-slate-900 text-balance">{leadForm.title}</Heading>
+  <p class="mt-2 text-sm text-slate-500">{leadForm.subtitle}</p>
+
+  <form
+    class="mt-6 grid gap-4 sm:grid-cols-2"
+    data-lead-form
+    novalidate
+    aria-labelledby={id('titulo')}
+  >
+    <div class="absolute -left-[9999px] h-px w-px overflow-hidden" aria-hidden="true">
+      <label for={id('website')}>Deixe este campo em branco</label>
+      <input id={id('website')} name="website" type="text" tabindex="-1" autocomplete="off" />
+    </div>
+
+    <div class="sm:col-span-2">
+      <label for={id('nome')} class={ui.label}>Nome completo</label>
+      <input
+        id={id('nome')}
+        name="nome"
+        type="text"
+        autocomplete="name"
+        required
+        minlength="3"
+        maxlength="120"
+        placeholder="Como podemos te chamar?"
+        aria-describedby={id('nome-erro')}
+        class:list={[ui.input, 'mt-1.5']}
+      />
+      <p id={id('nome-erro')} class="mt-1 text-xs font-medium text-rose-700" hidden></p>
+    </div>
+
+    <div>
+      <label for={id('email')} class={ui.label}>E-mail corporativo</label>
+      <input
+        id={id('email')}
+        name="email"
+        type="email"
+        autocomplete="email"
+        inputmode="email"
+        required
+        maxlength="160"
+        placeholder="nome@empresa.com.br"
+        aria-describedby={id('email-erro')}
+        class:list={[ui.input, 'mt-1.5']}
+      />
+      <p id={id('email-erro')} class="mt-1 text-xs font-medium text-rose-700" hidden></p>
+    </div>
+
+    <div>
+      <label for={id('telefone')} class={ui.label}>WhatsApp</label>
+      <input
+        id={id('telefone')}
+        name="telefone"
+        type="tel"
+        autocomplete="tel-national"
+        inputmode="tel"
+        required
+        pattern="\(\d{2}\) \d{4,5}-\d{4}"
+        placeholder="(11) 91234-5678"
+        aria-describedby={id('telefone-erro')}
+        class:list={[ui.input, 'mt-1.5']}
+      />
+      <p id={id('telefone-erro')} class="mt-1 text-xs font-medium text-rose-700" hidden></p>
+    </div>
+
+    <div>
+      <label for={id('empresa')} class={ui.label}>Empresa</label>
+      <input
+        id={id('empresa')}
+        name="empresa"
+        type="text"
+        autocomplete="organization"
+        required
+        maxlength="120"
+        placeholder="Nome da empresa"
+        aria-describedby={id('empresa-erro')}
+        class:list={[ui.input, 'mt-1.5']}
+      />
+      <p id={id('empresa-erro')} class="mt-1 text-xs font-medium text-rose-700" hidden></p>
+    </div>
+
+    <div>
+      <label for={id('cargo')} class={ui.label}>Cargo</label>
+      <select
+        id={id('cargo')}
+        name="cargo"
+        required
+        aria-describedby={id('cargo-erro')}
+        class:list={[ui.input, 'mt-1.5']}
+      >
+        <option value="" selected disabled>Selecione</option>
+        {leadForm.roles.map((role) => <option value={role.value}>{role.label}</option>)}
+      </select>
+      <p id={id('cargo-erro')} class="mt-1 text-xs font-medium text-rose-700" hidden></p>
+    </div>
+
+    <div>
+      <label for={id('tamanhoEquipe')} class={ui.label}>Tamanho do time comercial</label>
+      <select
+        id={id('tamanhoEquipe')}
+        name="tamanhoEquipe"
+        required
+        aria-describedby={id('tamanhoEquipe-erro')}
+        class:list={[ui.input, 'mt-1.5']}
+      >
+        <option value="" selected disabled>Selecione</option>
+        {leadForm.teamSizes.map((size) => <option value={size.value}>{size.label}</option>)}
+      </select>
+      <p id={id('tamanhoEquipe-erro')} class="mt-1 text-xs font-medium text-rose-700" hidden></p>
+    </div>
+
+    <div>
+      <label for={id('crm')} class={ui.label}>
+        CRM atual <span class="font-normal text-slate-400">(opcional)</span>
+      </label>
+      <select id={id('crm')} name="crm" class:list={[ui.input, 'mt-1.5']}>
+        <option value="" selected>Selecione</option>
+        {leadForm.crms.map((crm) => <option value={crm.value}>{crm.label}</option>)}
+      </select>
+    </div>
+
+    <div class="sm:col-span-2">
+      <div class="flex items-start gap-3">
+        <input
+          id={id('consentimentoLgpd')}
+          name="consentimentoLgpd"
+          type="checkbox"
+          required
+          aria-describedby={id('consentimentoLgpd-erro')}
+          class="mt-0.5 h-4 w-4 shrink-0 rounded border-slate-300 accent-teal-600 focus:ring-2 focus:ring-teal-500"
+        />
+        <label for={id('consentimentoLgpd')} class="text-xs leading-relaxed text-slate-500">
+          Concordo em receber contato do time comercial do Sonar e com a
+          <a href="/politica-de-privacidade" class="font-medium text-teal-700 underline underline-offset-2 hover:text-teal-800">
+            Política de Privacidade</a
+          >.
+        </label>
+      </div>
+      <p id={id('consentimentoLgpd-erro')} class="mt-1 text-xs font-medium text-rose-700" hidden></p>
+    </div>
+
+    <div
+      class="sm:col-span-2 rounded-lg bg-rose-50 px-3 py-2 text-sm font-medium text-rose-700"
+      role="alert"
+      data-form-status
+      hidden
+    >
+    </div>
+
+    <div class="sm:col-span-2">
+      <button type="submit" class:list={[ui.buttonPrimaryLg, 'w-full']}>
+        <span class="flex items-center gap-2" data-submit-label>
+          {leadForm.submitLabel}
+          <ArrowRight class="h-4 w-4" aria-hidden="true" />
+        </span>
+        <span class="flex items-center gap-2" data-submit-loading hidden>
+          <LoaderCircle class="h-4 w-4 animate-spin" aria-hidden="true" />
+          {leadForm.submittingLabel}
+        </span>
+      </button>
+      <p class="mt-3 flex items-center justify-center gap-1.5 text-xs text-slate-500">
+        <Lock class="h-3.5 w-3.5" aria-hidden="true" />
+        {leadForm.reassurance}
+      </p>
+    </div>
+  </form>
+</div>
+
+<script>
+  import '../scripts/lead-form';
+</script>

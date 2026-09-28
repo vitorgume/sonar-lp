@@ -1,0 +1,24 @@
+---
+import ChevronDown from '@lucide/astro/icons/chevron-down';
+import { faqs } from '../../data/content';
+import { ui } from '../../styles/ui';
+---
+
+<section id="duvidas" aria-labelledby="duvidas-titulo" class="scroll-mt-20 mx-auto max-w-3xl px-4 py-20 sm:px-6 lg:px-8 lg:py-28">
+  <div class="text-center">
+    <p class={ui.eyebrow}>Dúvidas frequentes</p>
+    <h2 id="duvidas-titulo" class:list={[ui.sectionTitle, 'mt-3']}>Perguntas sobre o Sonar</h2>
+  </div>
+
+  <div class="mt-12 divide-y divide-slate-200 rounded-xl border border-slate-200 bg-white shadow-sm">
+    {faqs.map((faq, index) => (
+      <details class="group px-6" open={index === 0}>
+        <summary class="flex cursor-pointer list-none items-center justify-between gap-4 py-5 text-left font-semibold text-slate-900 marker:hidden [&::-webkit-details-marker]:hidden focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-teal-500 focus-visible:rounded-lg">
+          <h3 class="text-base">{faq.question}</h3>
+          <ChevronDown class="h-5 w-5 shrink-0 text-slate-400 transition-transform group-open:rotate-180" aria-hidden="true" />
+        </summary>
+        <p class="pb-5 text-sm leading-relaxed text-slate-600">{faq.answer}</p>
+      </details>
+    ))}
+  </div>
+</section>

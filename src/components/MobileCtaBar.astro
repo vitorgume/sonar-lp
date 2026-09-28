@@ -1,0 +1,49 @@
+---
+import { ui } from '../styles/ui';
+---
+
+<div
+  class="fixed inset-x-0 bottom-0 z-40 translate-y-full border-t border-slate-200 bg-white/95 p-3 shadow-lg backdrop-blur transition-transform duration-300 motion-reduce:transition-none data-[visible=true]:translate-y-0 lg:hidden"
+  data-mobile-cta
+  data-visible="false"
+  aria-hidden="true"
+>
+  <a href="#formulario" class:list={[ui.buttonPrimaryLg, 'w-full']} data-cta="barra-mobile" tabindex="-1">
+    Agendar demonstração
+  </a>
+</div>
+
+<script>
+  // Mostra a barra só quando nenhum formulário está visível — evita CTA duplicado na tela.
+  const bar = document.querySelector<HTMLElement>('[data-mobile-cta]');
+  const link = bar?.querySelector<HTMLAnchorElement>('a');
+  const forms = document.querySelectorAll<HTMLFormElement>('form[data-lead-form]');
+
+  if (bar && link && forms.length > 0 && 'IntersectionObserver' in window) {
+    const visibleForms = new Set<Element>();
+    let heroPassed = false;
+
+    const update = (): void => {
+      const visible = heroPassed && visibleForms.size === 0;
+      bar.dataset.visible = String(visible);
+      bar.setAttribute('aria-hidden', String(!visible));
+      link.tabIndex = visible ? 0 : -1;
+    };
+
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach((entry) => {
+        if (entry.isIntersecting) {
+          visibleForms.add(entry.target);
+        } else {
+          visibleForms.delete(entry.target);
+        }
+        if (entry.target === forms[0] && !entry.isIntersecting) {
+          heroPassed = entry.boundingClientRect.top < 0;
+        }
+      });
+      update();
+    });
+
+    forms.forEach((form) => observer.observe(form));
+  }
+</script>

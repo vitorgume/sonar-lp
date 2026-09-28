@@ -1,0 +1,36 @@
+---
+import Icon from '../ui/Icon.astro';
+import CallReportMockup from '../mockups/CallReportMockup.astro';
+import { showcase } from '../../data/content';
+import { ui } from '../../styles/ui';
+---
+
+<section aria-labelledby="showcase-titulo" class="mx-auto max-w-7xl px-4 py-20 sm:px-6 lg:px-8 lg:py-28">
+  <div class="grid items-center gap-14 lg:grid-cols-12 lg:gap-12">
+    <div class="lg:col-span-5">
+      <p class={ui.eyebrow}>{showcase.eyebrow}</p>
+      <h2 id="showcase-titulo" class:list={[ui.sectionTitle, 'mt-3']}>{showcase.title}</h2>
+      <p class={ui.sectionLead}>{showcase.lead}</p>
+
+      <ul class="mt-10 grid gap-6 sm:grid-cols-2">
+        {showcase.callouts.map((callout) => (
+          <li>
+            <span class="inline-flex h-10 w-10 items-center justify-center rounded-lg bg-teal-50 text-teal-700">
+              <Icon name={callout.icon} />
+            </span>
+            <h3 class="mt-3 text-sm font-semibold text-slate-900">{callout.title}</h3>
+            <p class="mt-1 text-sm leading-relaxed text-slate-500">{callout.description}</p>
+          </li>
+        ))}
+      </ul>
+
+      <a href="#formulario" class:list={[ui.buttonPrimaryLg, 'mt-10 w-full sm:w-auto sm:inline-flex']} data-cta="showcase">
+        Quero ver com as minhas ligações
+      </a>
+    </div>
+
+    <div class="lg:col-span-7">
+      <CallReportMockup />
+    </div>
+  </div>
+</section>

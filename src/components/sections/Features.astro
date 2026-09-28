@@ -1,0 +1,32 @@
+---
+import Icon from '../ui/Icon.astro';
+import { features } from '../../data/content';
+import { ui } from '../../styles/ui';
+---
+
+<section id="recursos" aria-labelledby="recursos-titulo" class="scroll-mt-20 bg-white">
+  <div class="mx-auto max-w-7xl px-4 py-20 sm:px-6 lg:px-8 lg:py-28">
+    <div class="mx-auto max-w-3xl text-center">
+      <p class={ui.eyebrow}>{features.eyebrow}</p>
+      <h2 id="recursos-titulo" class:list={[ui.sectionTitle, 'mt-3']}>{features.title}</h2>
+      <p class={ui.sectionLead}>{features.lead}</p>
+    </div>
+
+    <ul class="mt-14 grid gap-6 md:grid-cols-2 lg:grid-cols-3">
+      {features.items.map((feature) => (
+        <li class:list={[ui.card, 'flex flex-col transition-shadow hover:shadow-md']}>
+          <span class="inline-flex h-11 w-11 items-center justify-center rounded-lg bg-teal-600 text-white shadow-sm">
+            <Icon name={feature.icon} />
+          </span>
+          <h3 class="mt-5 text-lg font-semibold text-slate-900">{feature.title}</h3>
+          <p class="mt-2 text-sm leading-relaxed text-slate-500">{feature.description}</p>
+          {feature.highlight && (
+            <p class="mt-auto pt-5">
+              <span class="block rounded-lg bg-sky-100 px-3 py-2 text-sm font-medium text-sky-800">{feature.highlight}</span>
+            </p>
+          )}
+        </li>
+      ))}
+    </ul>
+  </div>
+</section>
