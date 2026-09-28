@@ -1,6 +1,8 @@
 ---
+import ArrowRight from '@lucide/astro/icons/arrow-right';
 import Icon from '../ui/Icon.astro';
 import { strategy } from '../../data/content';
+import { ui } from '../../styles/ui';
 
 interface ObjectionBar {
   label: string;
@@ -45,6 +47,15 @@ const bars: ObjectionBar[] = [
           </li>
         ))}
       </ul>
+
+      <a
+        href="#formulario"
+        class:list={[ui.buttonPrimaryLg, 'mt-10 w-full focus-visible:ring-offset-slate-900 sm:inline-flex sm:w-auto']}
+        data-cta="estrategia"
+      >
+        Quero essa leitura do meu mercado
+        <ArrowRight class="h-4 w-4" aria-hidden="true" />
+      </a>
     </div>
 
     <figure class="rounded-xl border border-white/10 bg-slate-800/60 p-6 shadow-lg backdrop-blur">

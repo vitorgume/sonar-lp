@@ -18,7 +18,7 @@ export const site: SiteConfig = {
     'Avalie 100% das ligações do seu time comercial com IA: nota de 0 a 100, objeções, concorrentes e feedback pronto para o 1:1. Integra com Pipedrive, PipeRun e Moskit.',
   ogImageAlt: 'Sonar — análise de ligações de vendas com inteligência artificial',
   legalName: 'Sonar',
-  privacyEmail: 'privacidade@sonarbiz.com.br',
+  privacyEmail: 'vitorvieira@gumeinteligencia.com.br',
 };
 
 export const navLinks: { label: string; href: string }[] = [

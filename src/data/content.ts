@@ -43,10 +43,27 @@ export const leadForm = {
   reassurance: 'Sem compromisso. Seus dados são usados apenas para o contato comercial.',
 };
 
+export type IntegrationLogo = 'pipedrive' | 'piperun' | 'moskit' | 'api4com' | 'syma-voiceip';
+
+export interface Integration {
+  name: string;
+  logo: IntegrationLogo;
+  /** Empresa dona do produto, quando o logo exibido é o dela e não o do produto. */
+  vendor?: string;
+}
+
 export const integrations = {
   title: 'Conecta com o CRM e a central que seu time já usa',
-  crm: ['Pipedrive', 'PipeRun', 'Moskit'],
-  voip: ['API4COM', 'VoiceIP', 'PipeRun'],
+  crm: [
+    { name: 'Pipedrive', logo: 'pipedrive' },
+    { name: 'PipeRun', logo: 'piperun' },
+    { name: 'Moskit', logo: 'moskit' },
+  ] satisfies Integration[],
+  voip: [
+    { name: 'API4COM', logo: 'api4com' },
+    { name: 'VoiceIP', logo: 'syma-voiceip', vendor: 'Syma Solutions' },
+    { name: 'PipeRun', logo: 'piperun' },
+  ] satisfies Integration[],
 };
 
 export const problem = {

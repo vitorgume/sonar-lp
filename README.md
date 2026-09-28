@@ -84,7 +84,7 @@ O repositório tem um `render.yaml` (Blueprint). Manualmente, crie um **Web Serv
 ## Medição de conversão
 
 - Envio com sucesso → evento `generate_lead` no `dataLayer` (com `utm_source` e `utm_campaign`) e redirecionamento para `/obrigado`.
-- Cliques nos CTAs → evento `cta_click` com `cta_location` (`header`, `showcase`, `meio`, `barra-mobile`, `rodape`).
+- Cliques nos CTAs → evento `cta_click` com `cta_location` (`header`, `showcase`, `estrategia`, `meio`, `barra-mobile`, `rodape`).
 - `/obrigado` tem `noindex` e fica fora do sitemap — pode ser usada como URL de conversão no Google Ads / Meta Ads.
 
 ## Onde editar
@@ -98,6 +98,7 @@ O repositório tem um `render.yaml` (Blueprint). Manualmente, crie um **Web Serv
 | Validação no servidor e envio ao n8n | `src/pages/api/lead.ts` |
 | Classes do Design System (botões, inputs, cards) | `src/styles/ui.ts` |
 | Ordem das seções | `src/pages/index.astro` |
+| Logos das integrações | `src/assets/integrations/` (quadrados, 256 px) |
 | Política de privacidade | `src/pages/politica-de-privacidade.astro` |
 
 ## SEO
