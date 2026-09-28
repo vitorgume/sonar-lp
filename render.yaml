@@ -14,7 +14,7 @@ services:
       - key: HOST
         value: 0.0.0.0
       - key: SITE_URL
-        value: https://sonarbiz.com.br
+        value: https://lp.sonarbiz.com.br
       - key: N8N_WEBHOOK_URL
         sync: false
       - key: N8N_WEBHOOK_ATKEY

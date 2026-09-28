@@ -8,7 +8,7 @@ import { loadEnv } from 'vite';
 const { SITE_URL } = loadEnv(process.env.NODE_ENV ?? 'production', process.cwd(), '');
 
 export default defineConfig({
-  site: SITE_URL || 'https://sonarbiz.com.br',
+  site: SITE_URL || 'https://lp.sonarbiz.com.br',
   trailingSlash: 'ignore',
   compressHTML: true,
   // As páginas continuam pré-renderizadas (HTML estático para SEO); só `/api/lead` roda no servidor,
