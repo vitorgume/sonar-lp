@@ -9,9 +9,11 @@
     "preview": "astro preview",
     "astro": "astro",
     "images": "node scripts/generate-images.mjs",
-    "check": "astro check"
+    "check": "astro check",
+    "start": "node ./dist/server/entry.mjs"
   },
   "dependencies": {
+    "@astrojs/node": "^11.1.6",
     "@astrojs/sitemap": "^3.7.4",
     "@lucide/astro": "^1.48.0",
     "astro": "^7.3.5"

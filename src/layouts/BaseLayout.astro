@@ -1,5 +1,6 @@
 ---
 import { Font } from 'astro:assets';
+import { PUBLIC_GTM_ID } from 'astro:env/client';
 import '../styles/global.css';
 import { site } from '../data/site';
 
@@ -23,7 +24,7 @@ const {
 
 const canonicalUrl = new URL(path, Astro.site);
 const ogImageUrl = new URL(ogImage, Astro.site);
-const gtmId = import.meta.env.PUBLIC_GTM_ID;
+const gtmId = PUBLIC_GTM_ID;
 ---
 
 <!doctype html>

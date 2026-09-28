@@ -1,0 +1,23 @@
+# Blueprint do Render. Web Service (não Static Site): a rota /api/lead precisa de servidor
+# para repassar o lead ao n8n sem expor a URL e o atkey no navegador.
+services:
+  - type: web
+    name: sonar-lp
+    runtime: node
+    plan: starter
+    buildCommand: npm ci && npm run build
+    startCommand: npm start
+    healthCheckPath: /
+    envVars:
+      - key: NODE_VERSION
+        value: "24"
+      - key: HOST
+        value: 0.0.0.0
+      - key: SITE_URL
+        value: https://sonarbiz.com.br
+      - key: N8N_WEBHOOK_URL
+        sync: false
+      - key: N8N_WEBHOOK_ATKEY
+        sync: false
+      - key: PUBLIC_GTM_ID
+        sync: false

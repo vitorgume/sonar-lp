@@ -21,11 +21,6 @@ export interface Faq {
   answer: string;
 }
 
-export interface SelectOption {
-  value: string;
-  label: string;
-}
-
 export const hero = {
   eyebrow: 'Inteligência de ligações de vendas com IA',
   title: 'Saiba o que acontece em',
@@ -46,31 +41,6 @@ export const leadForm = {
   submitLabel: 'Agendar minha demonstração',
   submittingLabel: 'Enviando...',
   reassurance: 'Sem compromisso. Seus dados são usados apenas para o contato comercial.',
-  roles: [
-    { value: 'socio-ceo', label: 'Sócio(a) / CEO' },
-    { value: 'diretor-head-comercial', label: 'Diretor(a) ou Head Comercial' },
-    { value: 'gerente-coordenador-vendas', label: 'Gerente ou Coordenador(a) de Vendas' },
-    { value: 'lider-sdr', label: 'Líder de SDR / Pré-vendas' },
-    { value: 'enablement-treinamento', label: 'Enablement / Treinamento' },
-    { value: 'vendedor-sdr', label: 'Vendedor(a) ou SDR' },
-    { value: 'outro', label: 'Outro' },
-  ] satisfies SelectOption[],
-  teamSizes: [
-    { value: '1-5', label: '1 a 5 vendedores' },
-    { value: '6-15', label: '6 a 15 vendedores' },
-    { value: '16-50', label: '16 a 50 vendedores' },
-    { value: '51+', label: 'Mais de 50 vendedores' },
-  ] satisfies SelectOption[],
-  crms: [
-    { value: 'pipedrive', label: 'Pipedrive' },
-    { value: 'piperun', label: 'PipeRun' },
-    { value: 'moskit', label: 'Moskit' },
-    { value: 'rd-station-crm', label: 'RD Station CRM' },
-    { value: 'hubspot', label: 'HubSpot' },
-    { value: 'salesforce', label: 'Salesforce' },
-    { value: 'outro', label: 'Outro' },
-    { value: 'nenhum', label: 'Ainda não usamos CRM' },
-  ] satisfies SelectOption[],
 };
 
 export const integrations = {

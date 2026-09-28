@@ -1,9 +1,7 @@
 ---
 import CircleCheck from '@lucide/astro/icons/circle-check';
-import MessageCircle from '@lucide/astro/icons/message-circle';
 import LeadForm from '../LeadForm.astro';
 import { finalCta } from '../../data/content';
-import { site } from '../../data/site';
 ---
 
 <section aria-labelledby="cta-final-titulo" class="relative overflow-hidden bg-slate-900">
@@ -27,19 +25,6 @@ import { site } from '../../data/site';
           </li>
         ))}
       </ul>
-
-      <p class="mt-10 text-sm text-slate-400">
-        Prefere conversar agora?
-        <a
-          href={site.whatsappUrl}
-          target="_blank"
-          rel="noopener"
-          class="inline-flex items-center gap-1.5 font-semibold text-teal-300 underline-offset-4 hover:text-teal-200 hover:underline"
-          data-cta="whatsapp-final"
-        >
-          <MessageCircle class="h-4 w-4" aria-hidden="true" /> Fale com o time pelo WhatsApp
-        </a>
-      </p>
     </div>
 
     <div class="lg:col-span-6 xl:col-span-5">

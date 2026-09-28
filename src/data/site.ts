@@ -1,5 +1,3 @@
-const whatsappNumber = import.meta.env.PUBLIC_WHATSAPP_NUMBER || '5544991494350';
-
 export interface SiteConfig {
   name: string;
   tagline: string;
@@ -10,8 +8,6 @@ export interface SiteConfig {
   legalName: string;
   /** E-mail para solicitações de titulares de dados (LGPD). */
   privacyEmail: string;
-  whatsappNumber: string;
-  whatsappUrl: string;
 }
 
 export const site: SiteConfig = {
@@ -23,8 +19,6 @@ export const site: SiteConfig = {
   ogImageAlt: 'Sonar — análise de ligações de vendas com inteligência artificial',
   legalName: 'Sonar',
   privacyEmail: 'privacidade@sonarbiz.com.br',
-  whatsappNumber,
-  whatsappUrl: `https://wa.me/${whatsappNumber}?text=${encodeURIComponent('Olá! Vim pelo site e quero conhecer o Sonar.')}`,
 };
 
 export const navLinks: { label: string; href: string }[] = [

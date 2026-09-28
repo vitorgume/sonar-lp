@@ -49,6 +49,23 @@ const Heading = headingLevel;
     </div>
 
     <div>
+      <label for={id('telefone')} class={ui.label}>Telefone</label>
+      <input
+        id={id('telefone')}
+        name="telefone"
+        type="tel"
+        autocomplete="tel-national"
+        inputmode="tel"
+        required
+        pattern="\(\d{2}\) \d{4,5}-\d{4}"
+        placeholder="(11) 91234-5678"
+        aria-describedby={id('telefone-erro')}
+        class:list={[ui.input, 'mt-1.5']}
+      />
+      <p id={id('telefone-erro')} class="mt-1 text-xs font-medium text-rose-700" hidden></p>
+    </div>
+
+    <div>
       <label for={id('email')} class={ui.label}>E-mail corporativo</label>
       <input
         id={id('email')}
@@ -66,20 +83,20 @@ const Heading = headingLevel;
     </div>
 
     <div>
-      <label for={id('telefone')} class={ui.label}>WhatsApp</label>
+      <label for={id('cargo')} class={ui.label}>Cargo</label>
       <input
-        id={id('telefone')}
-        name="telefone"
-        type="tel"
-        autocomplete="tel-national"
-        inputmode="tel"
+        id={id('cargo')}
+        name="cargo"
+        type="text"
+        autocomplete="organization-title"
         required
-        pattern="\(\d{2}\) \d{4,5}-\d{4}"
-        placeholder="(11) 91234-5678"
-        aria-describedby={id('telefone-erro')}
+        minlength="2"
+        maxlength="120"
+        placeholder="Ex.: Gerente comercial"
+        aria-describedby={id('cargo-erro')}
         class:list={[ui.input, 'mt-1.5']}
       />
-      <p id={id('telefone-erro')} class="mt-1 text-xs font-medium text-rose-700" hidden></p>
+      <p id={id('cargo-erro')} class="mt-1 text-xs font-medium text-rose-700" hidden></p>
     </div>
 
     <div>
@@ -90,52 +107,13 @@ const Heading = headingLevel;
         type="text"
         autocomplete="organization"
         required
+        minlength="2"
         maxlength="120"
         placeholder="Nome da empresa"
         aria-describedby={id('empresa-erro')}
         class:list={[ui.input, 'mt-1.5']}
       />
       <p id={id('empresa-erro')} class="mt-1 text-xs font-medium text-rose-700" hidden></p>
-    </div>
-
-    <div>
-      <label for={id('cargo')} class={ui.label}>Cargo</label>
-      <select
-        id={id('cargo')}
-        name="cargo"
-        required
-        aria-describedby={id('cargo-erro')}
-        class:list={[ui.input, 'mt-1.5']}
-      >
-        <option value="" selected disabled>Selecione</option>
-        {leadForm.roles.map((role) => <option value={role.value}>{role.label}</option>)}
-      </select>
-      <p id={id('cargo-erro')} class="mt-1 text-xs font-medium text-rose-700" hidden></p>
-    </div>
-
-    <div>
-      <label for={id('tamanhoEquipe')} class={ui.label}>Tamanho do time comercial</label>
-      <select
-        id={id('tamanhoEquipe')}
-        name="tamanhoEquipe"
-        required
-        aria-describedby={id('tamanhoEquipe-erro')}
-        class:list={[ui.input, 'mt-1.5']}
-      >
-        <option value="" selected disabled>Selecione</option>
-        {leadForm.teamSizes.map((size) => <option value={size.value}>{size.label}</option>)}
-      </select>
-      <p id={id('tamanhoEquipe-erro')} class="mt-1 text-xs font-medium text-rose-700" hidden></p>
-    </div>
-
-    <div>
-      <label for={id('crm')} class={ui.label}>
-        CRM atual <span class="font-normal text-slate-400">(opcional)</span>
-      </label>
-      <select id={id('crm')} name="crm" class:list={[ui.input, 'mt-1.5']}>
-        <option value="" selected>Selecione</option>
-        {leadForm.crms.map((crm) => <option value={crm.value}>{crm.label}</option>)}
-      </select>
     </div>
 
     <div class="sm:col-span-2">

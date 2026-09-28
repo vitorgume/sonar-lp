@@ -3,15 +3,12 @@ import { FIRST_NAME_KEY } from './storage-keys';
 
 interface LeadPayload {
   nome: string;
-  email: string;
   telefone: string;
-  empresa: string;
+  email: string;
   cargo: string;
-  tamanhoEquipe: string;
-  crm: string;
+  empresa: string;
   consentimentoLgpd: boolean;
   origem: LeadAttribution;
-  enviadoEm: string;
 }
 
 type DataLayerEvent = Record<string, unknown>;
@@ -22,22 +19,22 @@ declare global {
   }
 }
 
-const ENDPOINT = import.meta.env.PUBLIC_LEAD_ENDPOINT ?? '';
+// Rota do próprio site: ela é quem repassa ao n8n com a chave de autenticação, que nunca vem ao navegador.
+const LEAD_ENDPOINT = '/api/lead';
 const THANK_YOU_PATH = '/obrigado';
 
 const FIELD_MESSAGES: Record<string, Partial<Record<keyof ValidityState, string>>> = {
   nome: { valueMissing: 'Informe seu nome.', tooShort: 'Digite seu nome completo.' },
+  telefone: {
+    valueMissing: 'Informe seu telefone.',
+    patternMismatch: 'Digite o número com DDD, como (11) 91234-5678.',
+  },
   email: {
     valueMissing: 'Informe seu e-mail.',
     typeMismatch: 'Digite um e-mail válido, como nome@empresa.com.br.',
   },
-  telefone: {
-    valueMissing: 'Informe seu WhatsApp.',
-    patternMismatch: 'Digite o número com DDD, como (11) 91234-5678.',
-  },
-  empresa: { valueMissing: 'Informe o nome da empresa.' },
-  cargo: { valueMissing: 'Selecione seu cargo.' },
-  tamanhoEquipe: { valueMissing: 'Selecione o tamanho do time comercial.' },
+  cargo: { valueMissing: 'Informe seu cargo.', tooShort: 'Informe seu cargo.' },
+  empresa: { valueMissing: 'Informe o nome da empresa.', tooShort: 'Informe o nome da empresa.' },
   consentimentoLgpd: { valueMissing: 'Precisamos do seu aceite para entrar em contato.' },
 };
 
@@ -49,13 +46,13 @@ function formatPhone(value: string): string {
   return `(${digits.slice(0, 2)}) ${digits.slice(2, 7)}-${digits.slice(7)}`;
 }
 
-function messageFor(field: HTMLInputElement | HTMLSelectElement): string {
+function messageFor(field: HTMLInputElement): string {
   const messages = FIELD_MESSAGES[field.name] ?? {};
   const failing = (Object.keys(messages) as (keyof ValidityState)[]).find((key) => field.validity[key]);
   return failing ? (messages[failing] ?? field.validationMessage) : field.validationMessage;
 }
 
-function setFieldError(field: HTMLInputElement | HTMLSelectElement, message: string): void {
+function setFieldError(field: HTMLInputElement, message: string): void {
   const errorEl = document.getElementById(`${field.id}-erro`);
   field.setAttribute('aria-invalid', message ? 'true' : 'false');
   if (errorEl) {
@@ -64,7 +61,7 @@ function setFieldError(field: HTMLInputElement | HTMLSelectElement, message: str
   }
 }
 
-function validateField(field: HTMLInputElement | HTMLSelectElement): boolean {
+function validateField(field: HTMLInputElement): boolean {
   const valid = field.checkValidity();
   setFieldError(field, valid ? '' : messageFor(field));
   return valid;
@@ -76,28 +73,17 @@ function buildPayload(form: HTMLFormElement, attribution: LeadAttribution): Lead
 
   return {
     nome: text('nome'),
-    email: text('email').toLowerCase(),
     telefone: text('telefone').replace(/\D/g, ''),
-    empresa: text('empresa'),
+    email: text('email').toLowerCase(),
     cargo: text('cargo'),
-    tamanhoEquipe: text('tamanhoEquipe'),
-    crm: text('crm'),
+    empresa: text('empresa'),
     consentimentoLgpd: data.get('consentimentoLgpd') === 'on',
     origem: attribution,
-    enviadoEm: new Date().toISOString(),
   };
 }
 
 async function sendLead(payload: LeadPayload): Promise<void> {
-  if (!ENDPOINT) {
-    if (import.meta.env.DEV) {
-      await new Promise((resolve) => setTimeout(resolve, 600));
-      return;
-    }
-    throw new Error('PUBLIC_LEAD_ENDPOINT não configurado.');
-  }
-
-  const response = await fetch(ENDPOINT, {
+  const response = await fetch(LEAD_ENDPOINT, {
     method: 'POST',
     headers: { 'Content-Type': 'application/json', Accept: 'application/json' },
     body: JSON.stringify(payload),
@@ -112,9 +98,6 @@ function trackConversion(payload: LeadPayload): void {
   window.dataLayer = window.dataLayer ?? [];
   window.dataLayer.push({
     event: 'generate_lead',
-    lead_team_size: payload.tamanhoEquipe,
-    lead_role: payload.cargo,
-    lead_crm: payload.crm,
     utm_source: payload.origem.utm_source,
     utm_campaign: payload.origem.utm_campaign,
   });
@@ -137,7 +120,7 @@ function initLeadForm(form: HTMLFormElement): void {
   const submitLoading = form.querySelector<HTMLElement>('[data-submit-loading]');
   const statusEl = form.querySelector<HTMLElement>('[data-form-status]');
   const phoneInput = form.querySelector<HTMLInputElement>('input[name="telefone"]');
-  const fields = Array.from(form.querySelectorAll<HTMLInputElement | HTMLSelectElement>('input[required], select[required]'));
+  const fields = Array.from(form.querySelectorAll<HTMLInputElement>('input[required]'));
 
   phoneInput?.addEventListener('input', () => {
     phoneInput.value = formatPhone(phoneInput.value);
@@ -189,9 +172,7 @@ function initLeadForm(form: HTMLFormElement): void {
       window.location.assign(THANK_YOU_PATH);
     } catch {
       setSubmitting(false);
-      showStatus(
-        'Não conseguimos enviar seus dados agora. Tente novamente em instantes ou fale com a gente pelo WhatsApp.',
-      );
+      showStatus('Não conseguimos enviar seus dados agora. Confira sua conexão e tente novamente em instantes.');
     }
   });
 }

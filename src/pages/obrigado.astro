@@ -1,10 +1,8 @@
 ---
 import CircleCheck from '@lucide/astro/icons/circle-check';
-import MessageCircle from '@lucide/astro/icons/message-circle';
 import BaseLayout from '../layouts/BaseLayout.astro';
 import Header from '../components/Header.astro';
 import Footer from '../components/Footer.astro';
-import { site } from '../data/site';
 import { ui } from '../styles/ui';
 
 interface NextStep {
@@ -15,11 +13,11 @@ interface NextStep {
 const nextSteps: NextStep[] = [
   {
     title: 'Olhamos o seu contexto',
-    description: 'Nosso time confere o tamanho da operação e as ferramentas que vocês usam para preparar a conversa.',
+    description: 'Nosso time confere os dados da sua empresa para preparar uma conversa relevante para a sua operação.',
   },
   {
     title: 'Entramos em contato',
-    description: 'Um especialista do Sonar fala com você pelo WhatsApp ou e-mail informados para combinar o melhor horário.',
+    description: 'Um especialista do Sonar fala com você pelo telefone ou e-mail informados para combinar o melhor horário.',
   },
   {
     title: 'Demonstração guiada',
@@ -69,11 +67,7 @@ const nextSteps: NextStep[] = [
       </p>
     </div>
 
-    <div class="mt-10 flex flex-col items-center justify-center gap-3 sm:flex-row">
-      <a href={site.whatsappUrl} target="_blank" rel="noopener" class={ui.buttonPrimaryLg} data-cta="whatsapp-obrigado">
-        <MessageCircle class="h-5 w-5" aria-hidden="true" />
-        Adiantar pelo WhatsApp
-      </a>
+    <div class="mt-10 flex justify-center">
       <a href="/" class={ui.buttonSecondaryLg}>Voltar ao site</a>
     </div>
   </main>

@@ -13,13 +13,6 @@ export function buildHomeStructuredData(siteUrl: URL): Record<string, unknown>[]
       name: site.name,
       url,
       logo: new URL('/logo.png', siteUrl).href,
-      contactPoint: {
-        '@type': 'ContactPoint',
-        contactType: 'sales',
-        telephone: `+${site.whatsappNumber}`,
-        areaServed: 'BR',
-        availableLanguage: 'Portuguese',
-      },
     },
     {
       '@context': 'https://schema.org',

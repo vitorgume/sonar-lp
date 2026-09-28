@@ -1,5 +1,6 @@
 // @ts-check
-import { defineConfig, fontProviders } from 'astro/config';
+import { defineConfig, envField, fontProviders } from 'astro/config';
+import node from '@astrojs/node';
 import sitemap from '@astrojs/sitemap';
 import tailwindcss from '@tailwindcss/vite';
 import { loadEnv } from 'vite';
@@ -10,8 +11,19 @@ export default defineConfig({
   site: SITE_URL || 'https://sonarbiz.com.br',
   trailingSlash: 'ignore',
   compressHTML: true,
+  // As páginas continuam pré-renderizadas (HTML estático para SEO); só `/api/lead` roda no servidor,
+  // para que a URL e a chave do webhook do n8n nunca cheguem ao navegador.
+  output: 'static',
+  adapter: node({ mode: 'standalone' }),
   build: {
     inlineStylesheets: 'always',
+  },
+  env: {
+    schema: {
+      N8N_WEBHOOK_URL: envField.string({ context: 'server', access: 'secret', optional: true, url: true }),
+      N8N_WEBHOOK_ATKEY: envField.string({ context: 'server', access: 'secret', optional: true }),
+      PUBLIC_GTM_ID: envField.string({ context: 'client', access: 'public', optional: true }),
+    },
   },
   fonts: [
     {
