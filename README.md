@@ -60,6 +60,7 @@ O repositório tem um `render.yaml` (Blueprint). Manualmente, crie um **Web Serv
   "email": "joao@empresa.com.br",
   "cargo": "Gerente comercial",
   "empresa": "Empresa Ltda",
+  "tamanhoTimeComercial": 8,
   "consentimentoLgpd": true,
   "origem": {
     "utm_source": "meta",
@@ -76,7 +77,7 @@ O repositório tem um `render.yaml` (Blueprint). Manualmente, crie um **Web Serv
 }
 ```
 
-- `email` em minúsculas; `telefone` só com dígitos (DDD + número); `cargo` é texto livre.
+- `email` em minúsculas; `telefone` só com dígitos (DDD + número); `cargo` é texto livre; `tamanhoTimeComercial` é número inteiro (1 a 9999), enviado como número e não como texto.
 - O servidor remonta o lead campo a campo: qualquer campo extra enviado pelo navegador é descartado.
 - `enviadoEm` é gerado no servidor.
 - As UTMs ficam guardadas na sessão do navegador: se o visitante recarregar a página, a origem da campanha continua no lead.

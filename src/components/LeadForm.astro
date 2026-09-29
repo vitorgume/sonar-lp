@@ -117,6 +117,25 @@ const Heading = headingLevel;
     </div>
 
     <div class="sm:col-span-2">
+      <label for={id('tamanhoTimeComercial')} class={ui.label}>Tamanho do time comercial</label>
+      <input
+        id={id('tamanhoTimeComercial')}
+        name="tamanhoTimeComercial"
+        type="number"
+        inputmode="numeric"
+        autocomplete="off"
+        required
+        min="1"
+        max="9999"
+        step="1"
+        placeholder="Nº de vendedores. Ex.: 8"
+        aria-describedby={id('tamanhoTimeComercial-erro')}
+        class:list={[ui.input, 'mt-1.5']}
+      />
+      <p id={id('tamanhoTimeComercial-erro')} class="mt-1 text-xs font-medium text-rose-700" hidden></p>
+    </div>
+
+    <div class="sm:col-span-2">
       <div class="flex items-start gap-3">
         <input
           id={id('consentimentoLgpd')}

@@ -21,12 +21,15 @@ interface LeadPayload {
   email: string;
   cargo: string;
   empresa: string;
+  tamanhoTimeComercial: number;
   consentimentoLgpd: boolean;
   origem: LeadAttribution;
   enviadoEm: string;
 }
 
 const UPSTREAM_TIMEOUT_MS = 10_000;
+const TEAM_SIZE_MIN = 1;
+const TEAM_SIZE_MAX = 9999;
 const EMAIL_PATTERN = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 const ATTRIBUTION_KEYS: (keyof LeadAttribution)[] = [
   'utm_source',
@@ -51,6 +54,13 @@ function text(value: unknown, maxLength: number): string {
   return typeof value === 'string' ? value.trim().slice(0, maxLength) : '';
 }
 
+/** Aceita número ou texto só com dígitos; qualquer outra coisa (decimal, notação científica, vazio) vira NaN. */
+function wholeNumber(value: unknown): number {
+  if (typeof value === 'number') return Number.isInteger(value) ? value : Number.NaN;
+  if (typeof value === 'string' && /^\d{1,6}$/.test(value.trim())) return Number(value.trim());
+  return Number.NaN;
+}
+
 /**
  * Remonta o lead campo a campo a partir do corpo recebido: nada que o navegador mande além do
  * contrato chega ao n8n, e os limites de tamanho valem mesmo para quem chamar a rota sem o formulário.
@@ -66,6 +76,7 @@ function parseLead(body: unknown): LeadPayload | null {
     email: text(input.email, 160).toLowerCase(),
     cargo: text(input.cargo, 120),
     empresa: text(input.empresa, 120),
+    tamanhoTimeComercial: wholeNumber(input.tamanhoTimeComercial),
     consentimentoLgpd: input.consentimentoLgpd === true,
     origem: Object.fromEntries(ATTRIBUTION_KEYS.map((key) => [key, text(rawOrigem[key], 500)])) as unknown as LeadAttribution,
     enviadoEm: new Date().toISOString(),
@@ -78,6 +89,8 @@ function parseLead(body: unknown): LeadPayload | null {
     EMAIL_PATTERN.test(lead.email) &&
     lead.cargo.length >= 2 &&
     lead.empresa.length >= 2 &&
+    lead.tamanhoTimeComercial >= TEAM_SIZE_MIN &&
+    lead.tamanhoTimeComercial <= TEAM_SIZE_MAX &&
     lead.consentimentoLgpd;
 
   return valid ? lead : null;

@@ -7,6 +7,7 @@ interface LeadPayload {
   email: string;
   cargo: string;
   empresa: string;
+  tamanhoTimeComercial: number;
   consentimentoLgpd: boolean;
   origem: LeadAttribution;
 }
@@ -35,6 +36,13 @@ const FIELD_MESSAGES: Record<string, Partial<Record<keyof ValidityState, string>
   },
   cargo: { valueMissing: 'Informe seu cargo.', tooShort: 'Informe seu cargo.' },
   empresa: { valueMissing: 'Informe o nome da empresa.', tooShort: 'Informe o nome da empresa.' },
+  tamanhoTimeComercial: {
+    valueMissing: 'Informe quantas pessoas tem no time comercial.',
+    badInput: 'Digite apenas números.',
+    stepMismatch: 'Digite um número inteiro.',
+    rangeUnderflow: 'Informe pelo menos 1 pessoa.',
+    rangeOverflow: 'Informe um número de até 9999.',
+  },
   consentimentoLgpd: { valueMissing: 'Precisamos do seu aceite para entrar em contato.' },
 };
 
@@ -77,6 +85,7 @@ function buildPayload(form: HTMLFormElement, attribution: LeadAttribution): Lead
     email: text('email').toLowerCase(),
     cargo: text('cargo'),
     empresa: text('empresa'),
+    tamanhoTimeComercial: Number.parseInt(text('tamanhoTimeComercial'), 10),
     consentimentoLgpd: data.get('consentimentoLgpd') === 'on',
     origem: attribution,
   };
@@ -125,6 +134,14 @@ function initLeadForm(form: HTMLFormElement): void {
   phoneInput?.addEventListener('input', () => {
     phoneInput.value = formatPhone(phoneInput.value);
   });
+
+  const teamSizeInput = form.querySelector<HTMLInputElement>('input[name="tamanhoTimeComercial"]');
+  // Campo numérico nativo aceita "e", "+", "-" e casas decimais; aqui só faz sentido número inteiro positivo.
+  teamSizeInput?.addEventListener('keydown', (event) => {
+    if (['e', 'E', '+', '-', '.', ','].includes(event.key)) event.preventDefault();
+  });
+  // Evita mudar o valor sem querer ao rolar a página com o cursor sobre o campo em foco.
+  teamSizeInput?.addEventListener('wheel', () => teamSizeInput.blur(), { passive: true });
 
   fields.forEach((field) => {
     field.addEventListener('blur', () => validateField(field));
