@@ -23,6 +23,7 @@ export default defineConfig({
       N8N_WEBHOOK_URL: envField.string({ context: 'server', access: 'secret', optional: true, url: true }),
       N8N_WEBHOOK_ATKEY: envField.string({ context: 'server', access: 'secret', optional: true }),
       PUBLIC_GTM_ID: envField.string({ context: 'client', access: 'public', optional: true }),
+      PUBLIC_META_PIXEL_ID: envField.string({ context: 'client', access: 'public', optional: true }),
     },
   },
   fonts: [
