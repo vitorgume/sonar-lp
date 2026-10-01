@@ -17,6 +17,7 @@ type DataLayerEvent = Record<string, unknown>;
 declare global {
   interface Window {
     dataLayer?: DataLayerEvent[];
+    fbq?: (...args: unknown[]) => void;
   }
 }
 
@@ -110,7 +111,14 @@ function trackConversion(payload: LeadPayload): void {
     utm_source: payload.origem.utm_source,
     utm_campaign: payload.origem.utm_campaign,
   });
+
+  // Evento padrão "Lead" do Pixel da Meta: é ele que a campanha usa para otimizar.
+  // Fica aqui para disparar só depois que o envio deu certo.
+  window.fbq?.('track', 'Lead');
 }
+
+// Dá tempo do navegador despachar os eventos de conversão antes de sair da página.
+const REDIRECT_DELAY_MS = 300;
 
 // Guardado só na sessão do navegador para personalizar a página de obrigado —
 // nunca na URL, que acabaria registrada em analytics e logs de servidor.
@@ -186,7 +194,7 @@ function initLeadForm(form: HTMLFormElement): void {
       await sendLead(payload);
       trackConversion(payload);
       rememberFirstName(payload.nome);
-      window.location.assign(THANK_YOU_PATH);
+      window.setTimeout(() => window.location.assign(THANK_YOU_PATH), REDIRECT_DELAY_MS);
     } catch {
       setSubmitting(false);
       showStatus('Não conseguimos enviar seus dados agora. Confira sua conexão e tente novamente em instantes.');
