@@ -18,6 +18,7 @@ declare global {
   interface Window {
     dataLayer?: DataLayerEvent[];
     fbq?: (...args: unknown[]) => void;
+    gtag?: (...args: unknown[]) => void;
   }
 }
 
@@ -108,6 +109,12 @@ function trackConversion(payload: LeadPayload): void {
   window.dataLayer = window.dataLayer ?? [];
   window.dataLayer.push({
     event: 'generate_lead',
+    utm_source: payload.origem.utm_source,
+    utm_campaign: payload.origem.utm_campaign,
+  });
+
+  // O gtag.js não lê os objetos que o GTM consome no dataLayer, então o GA4 recebe o evento direto.
+  window.gtag?.('event', 'generate_lead', {
     utm_source: payload.origem.utm_source,
     utm_campaign: payload.origem.utm_campaign,
   });
@@ -209,6 +216,7 @@ function initCtaLinks(): void {
     link.addEventListener('click', () => {
       window.dataLayer = window.dataLayer ?? [];
       window.dataLayer.push({ event: 'cta_click', cta_location: link.dataset.cta });
+      window.gtag?.('event', 'cta_click', { cta_location: link.dataset.cta });
 
       // No desktop o cursor já cai no primeiro campo; no mobile isso abriria o teclado no meio da rolagem.
       if (canAutoFocus && link.hash === '#formulario') {

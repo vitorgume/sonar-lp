@@ -1,6 +1,6 @@
 ---
 import { Font } from 'astro:assets';
-import { PUBLIC_GTM_ID, PUBLIC_META_PIXEL_ID } from 'astro:env/client';
+import { PUBLIC_GA_ID, PUBLIC_GTM_ID, PUBLIC_META_PIXEL_ID } from 'astro:env/client';
 import '../styles/global.css';
 import { site } from '../data/site';
 
@@ -25,6 +25,7 @@ const {
 const canonicalUrl = new URL(path, Astro.site);
 const ogImageUrl = new URL(ogImage, Astro.site);
 const gtmId = PUBLIC_GTM_ID;
+const gaId = PUBLIC_GA_ID;
 const metaPixelId = PUBLIC_META_PIXEL_ID;
 ---
 
@@ -77,6 +78,18 @@ const metaPixelId = PUBLIC_META_PIXEL_ID;
           j.src = 'https://www.googletagmanager.com/gtm.js?id=' + i + (l != 'dataLayer' ? '&l=' + l : '');
           f.parentNode.insertBefore(j, f);
         })(window, document, 'script', 'dataLayer', gtmId);
+      </script>
+    )}
+
+    {gaId && <script is:inline async src={`https://www.googletagmanager.com/gtag/js?id=${gaId}`}></script>}
+    {gaId && (
+      <script is:inline define:vars={{ gaId }}>
+        window.dataLayer = window.dataLayer || [];
+        window.gtag = function () {
+          window.dataLayer.push(arguments);
+        };
+        gtag('js', new Date());
+        gtag('config', gaId);
       </script>
     )}
 

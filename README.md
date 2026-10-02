@@ -32,6 +32,8 @@ Copie `.env.example` para `.env` localmente; em produção, configure no Render.
 | `N8N_WEBHOOK_ATKEY` | Em execução (servidor) | Valor enviado no header `atkey` para autenticar no n8n. |
 | `SITE_URL` | No build | Domínio final: canonical, Open Graph, sitemap e robots.txt. |
 | `PUBLIC_GTM_ID` | No build | Opcional. Container do Google Tag Manager. |
+| `PUBLIC_GA_ID` | No build | Opcional. ID de métricas do Google Analytics 4 (`G-XXXXXXXXXX`). Não use junto com uma tag GA4 no GTM. |
+| `PUBLIC_META_PIXEL_ID` | No build | Opcional. ID do Pixel da Meta. |
 | `HOST` / `PORT` | Em execução | No Render: `HOST=0.0.0.0`; o `PORT` o próprio Render define. |
 
 Sem `N8N_WEBHOOK_URL` ou `N8N_WEBHOOK_ATKEY`, a rota responde `503` e o formulário mostra mensagem de erro.
@@ -44,7 +46,7 @@ O repositório tem um `render.yaml` (Blueprint). Manualmente, crie um **Web Serv
 - **Runtime:** Node
 - **Build Command:** `npm ci && npm run build`
 - **Start Command:** `npm start`
-- **Environment:** `HOST=0.0.0.0`, `SITE_URL`, `N8N_WEBHOOK_URL`, `N8N_WEBHOOK_ATKEY` (e `PUBLIC_GTM_ID`, se usar)
+- **Environment:** `HOST=0.0.0.0`, `SITE_URL`, `N8N_WEBHOOK_URL`, `N8N_WEBHOOK_ATKEY` (e `PUBLIC_GTM_ID`, `PUBLIC_GA_ID`, `PUBLIC_META_PIXEL_ID`, se usar)
 
 > No plano gratuito do Render o serviço "dorme" após ~15 min sem acesso e a primeira visita pode levar quase um minuto
 > para responder — com tráfego pago isso derruba conversão. Use um plano pago (o `render.yaml` já vem com `starter`).
