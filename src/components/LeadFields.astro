@@ -1,0 +1,75 @@
+---
+import { roleOptions, teamSizes } from '../data/raio-x';
+
+interface Props {
+  /** Prefixo dos ids: o modal tem dois formulários e os ids precisam ser únicos. */
+  prefix: string;
+}
+
+const { prefix } = Astro.props;
+const id = (name: string): string => `${prefix}${name}`;
+---
+
+<div class="hp" aria-hidden="true">
+  <label for={id('Website')}>Deixe este campo em branco</label>
+  <input id={id('Website')} name="website" type="text" tabindex="-1" autocomplete="off" />
+</div>
+<div class="f">
+  <label for={id('Nome')}>Nome</label>
+  <input
+    id={id('Nome')}
+    name="nome"
+    autocomplete="name"
+    autocapitalize="words"
+    enterkeyhint="next"
+    placeholder="Como podemos te chamar?"
+    maxlength="120"
+    required
+  />
+</div>
+<div class="row2">
+  <div class="f">
+    <label for={id('Whats')}>WhatsApp</label>
+    <input
+      id={id('Whats')}
+      name="whatsapp"
+      type="tel"
+      inputmode="tel"
+      autocomplete="tel-national"
+      enterkeyhint="next"
+      placeholder="(44) 99999-0000"
+      required
+    />
+  </div>
+  <div class="f">
+    <label for={id('Empresa')}>Empresa</label>
+    <input
+      id={id('Empresa')}
+      name="empresa"
+      autocomplete="organization"
+      autocapitalize="words"
+      enterkeyhint="next"
+      placeholder="Onde você trabalha"
+      maxlength="120"
+      required
+    />
+  </div>
+</div>
+<div class="f">
+  <label for={id('Cargo')}>Cargo</label>
+  <select id={id('Cargo')} name="cargo" required>
+    <option value="" selected disabled>Selecione</option>
+    {roleOptions.map((role) => <option>{role}</option>)}
+  </select>
+</div>
+<div class="f">
+  <label id={id('TamLbl')}>Vendedores no time</label>
+  <div class="seg" role="radiogroup" aria-labelledby={id('TamLbl')}>
+    {teamSizes.map((size, index) => (
+      <>
+        <input type="radio" name="tamanho" id={id(`T${index + 1}`)} value={size.value} />
+        <label for={id(`T${index + 1}`)}>{size.label}</label>
+      </>
+    ))}
+  </div>
+</div>

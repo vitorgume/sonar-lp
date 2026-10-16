@@ -1,0 +1,68 @@
+---
+import { quizQuestions } from '../../data/raio-x';
+---
+
+<section class="s" id="teste" aria-labelledby="h-teste">
+  <div class="wrap">
+    <div class="s-head center">
+      <p class="label">Teste do ponto cego · {quizQuestions.length} perguntas</p>
+      <h2 id="h-teste">Quanto da sua operação você enxerga de verdade?</h2>
+      <p>Responda com sinceridade. Leva menos de um minuto.</p>
+    </div>
+    <div class="quiz" id="quiz" aria-live="polite">
+      <div class="qbar" aria-hidden="true">{quizQuestions.map(() => <i></i>)}</div>
+      <p class="qnum">PERGUNTA 1 DE {quizQuestions.length}</p>
+      <p class="qtext">{quizQuestions[0]}</p>
+      <div class="qbtns"><button type="button" data-answer="1">Sim</button><button type="button" data-answer="0">Não</button></div>
+    </div>
+  </div>
+</section>
+
+<script>
+  import { quizQuestions, quizResultFor } from '../../data/raio-x';
+  import { track } from '../../scripts/analytics';
+  import { leadContext } from '../../scripts/lead-context';
+
+  const quiz = document.getElementById('quiz');
+
+  if (quiz) {
+    const total = quizQuestions.length;
+    let index = 0;
+    let yes = 0;
+
+    const progressBar = (): string =>
+      `<div class="qbar" aria-hidden="true">${quizQuestions.map((_, i) => `<i class="${i < index ? 'on' : ''}"></i>`).join('')}</div>`;
+
+    const ask = (): void => {
+      quiz.innerHTML = `${progressBar()}<p class="qnum">PERGUNTA ${index + 1} DE ${total}</p><p class="qtext">${quizQuestions[index]}</p><div class="qbtns"><button type="button" data-answer="1">Sim</button><button type="button" data-answer="0">Não</button></div>`;
+    };
+
+    const showResult = (): void => {
+      const result = quizResultFor(yes);
+      quiz.innerHTML = `<div class="qres">${progressBar()}<p class="qnum">RESULTADO · ${yes} DE ${total} RESPOSTAS SIM</p><div class="meter"><i style="left:0%"></i></div><div class="scale"><span>ponto cego</span><span>visão parcial</span><span>visão total</span></div><h3>${result.heading}</h3><p>${result.text}</p><div class="row"><button class="btn btn-primary" type="button" data-open="demo" data-src="teste">Quero meu Raio-X</button><button class="again" type="button">Refazer o teste</button></div></div>`;
+      const marker = quiz.querySelector<HTMLElement>('.meter i');
+      requestAnimationFrame(() => requestAnimationFrame(() => marker && (marker.style.left = `${result.position}%`)));
+      leadContext.setQuizLevel(result.level);
+      track('teste_concluido', { nivel: result.level });
+    };
+
+    // Delegação: os botões são recriados a cada pergunta.
+    quiz.addEventListener('click', (event) => {
+      const target = event.target as Element;
+      const answer = target.closest<HTMLButtonElement>('[data-answer]');
+      if (answer) {
+        if (index === 0) track('teste_iniciado');
+        yes += Number(answer.dataset.answer);
+        index += 1;
+        if (index < total) ask();
+        else showResult();
+        return;
+      }
+      if (target.closest('.again')) {
+        index = 0;
+        yes = 0;
+        ask();
+      }
+    });
+  }
+</script>

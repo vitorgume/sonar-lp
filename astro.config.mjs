@@ -30,17 +30,26 @@ export default defineConfig({
   fonts: [
     {
       provider: fontProviders.google(),
-      name: 'Inter',
-      cssVariable: '--font-inter',
+      name: 'Manrope',
+      cssVariable: '--font-manrope',
       weights: ['400 800'],
       styles: ['normal'],
       subsets: ['latin'],
-      fallbacks: ['ui-sans-serif', 'system-ui', 'sans-serif'],
+      fallbacks: ['Segoe UI', 'system-ui', 'sans-serif'],
+    },
+    {
+      provider: fontProviders.google(),
+      name: 'IBM Plex Mono',
+      cssVariable: '--font-plex-mono',
+      weights: [400, 500],
+      styles: ['normal'],
+      subsets: ['latin'],
+      fallbacks: ['ui-monospace', 'SFMono-Regular', 'Menlo', 'monospace'],
     },
   ],
   integrations: [
     sitemap({
-      filter: (page) => !page.includes('/obrigado') && !page.includes('/404'),
+      filter: (page) => !page.includes('/404'),
     }),
   ],
   vite: {

@@ -1,55 +1,113 @@
 ---
-import CircleCheck from '@lucide/astro/icons/circle-check';
-import LeadForm from '../LeadForm.astro';
+import StrokeIcon from '../ui/StrokeIcon.astro';
 import { hero } from '../../data/content';
-import { ui } from '../../styles/ui';
+import {
+  DEFAULT_PAIN,
+  findingPositions,
+  findings,
+  painKeys,
+  pains,
+  reportScore,
+} from '../../data/raio-x';
+
+const initial = pains[DEFAULT_PAIN];
+const RING_CIRCUMFERENCE = 263.9;
 ---
 
-<section id="inicio" aria-labelledby="hero-titulo" class="relative overflow-hidden">
-  <div class="pointer-events-none absolute inset-0 -z-10" aria-hidden="true">
-    <div class="absolute -top-40 left-1/2 h-[42rem] w-[42rem] -translate-x-1/2 rounded-full bg-teal-100/60 blur-3xl lg:left-1/4"></div>
-    <div class="absolute top-20 right-0 h-80 w-80 rounded-full bg-sky-100/70 blur-3xl"></div>
-    <svg class="absolute -top-24 -left-24 h-[36rem] w-[36rem] text-teal-600/10" viewBox="0 0 132 132" fill="none">
-      <circle cx="66" cy="66" r="24" stroke="currentColor" stroke-width="1"></circle>
-      <circle cx="66" cy="66" r="40" stroke="currentColor" stroke-width="1"></circle>
-      <circle cx="66" cy="66" r="56" stroke="currentColor" stroke-width="1"></circle>
-    </svg>
-  </div>
-
-  <div class="mx-auto grid max-w-7xl gap-12 px-4 pt-12 pb-16 sm:px-6 sm:pt-16 lg:grid-cols-12 lg:gap-10 lg:px-8 lg:pt-20 lg:pb-24">
-    <div class="lg:col-span-6 lg:pt-6 xl:col-span-7">
-      <p class={ui.aiBadge}>
-        <span class="relative flex h-2 w-2" aria-hidden="true">
-          <span class="absolute inline-flex h-full w-full animate-ping rounded-full bg-sky-500 opacity-60 motion-reduce:animate-none"></span>
-          <span class="relative inline-flex h-2 w-2 rounded-full bg-sky-600"></span>
-        </span>
-        {hero.eyebrow}
-      </p>
-
-      <h1 id="hero-titulo" class="mt-5 text-4xl font-semibold tracking-tight text-slate-900 text-balance sm:text-5xl xl:text-6xl">
-        {hero.title} <span class="text-teal-600">{hero.titleHighlight}</span> {hero.titleEnd}
-      </h1>
-
-      <p class="mt-6 max-w-2xl text-lg leading-relaxed text-slate-600 text-pretty">
-        {hero.lead}
-      </p>
-
-      <ul class="mt-8 space-y-3">
-        {hero.bullets.map((bullet) => (
-          <li class="flex items-start gap-3 text-slate-700">
-            <CircleCheck class="mt-0.5 h-5 w-5 shrink-0 text-emerald-500" aria-hidden="true" />
-            <span class="font-medium">{bullet}</span>
-          </li>
+<section class="hero" aria-labelledby="h1">
+  <canvas id="sonar-bg" aria-hidden="true"></canvas>
+  <div class="wrap">
+    <div>
+      <p class="label"><span class="dot"></span>{hero.eyebrow}</p>
+      <h1 id="h1">{hero.title}</h1>
+      <p class="q" id="heroQ">{initial.question}</p>
+      <p class="pains-lbl">{hero.painsLabel} <span>{hero.painsHint}</span></p>
+      <div class="pains" role="group" aria-label="Dores do time comercial">
+        {painKeys.map((key) => (
+          <button class="pain" type="button" data-pain={key} aria-pressed={key === DEFAULT_PAIN ? 'true' : 'false'}>
+            <StrokeIcon paths={pains[key].icon} />
+            {pains[key].button}
+          </button>
         ))}
-      </ul>
-
-      <div class="mt-10 hidden flex-wrap items-center gap-3 lg:flex">
-        <a href="#como-funciona" class={ui.buttonSecondaryLg}>Ver como funciona</a>
       </div>
+      <div class="hero-cta">
+        <button class="btn btn-primary" type="button" data-open="demo" data-src="hero">
+          {hero.primaryCta}
+          <StrokeIcon paths='<path d="M5 12h14M13 6l6 6-6 6"/>' strokeWidth={2.4} />
+        </button>
+        <button class="link-btn" type="button" data-open="video" data-src="hero">
+          <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M8 5.5v13l11-6.5z"></path></svg>
+          {hero.secondaryCta}
+        </button>
+      </div>
+      <div class="micro">{hero.micro.map((item) => <span>{item}</span>)}</div>
     </div>
 
-    <div id="formulario" class="scroll-mt-24 lg:col-span-6 xl:col-span-5" data-hero-form>
-      <LeadForm idPrefix="hero" />
+    <!-- Relatório: análise ao vivo, parte bloqueada -->
+    <div class="report" aria-label="Exemplo de relatório do Sonar">
+      <div class="report-head">
+        <span>relatório · ligação #4821 · closer</span>
+        <span class="chip ai" id="repStatus">Gerado por IA</span>
+      </div>
+      <div class="score-row">
+        <div class="ring" role="img" aria-label={`Nota ${reportScore} de 100`}>
+          <svg viewBox="0 0 96 96" aria-hidden="true">
+            <circle cx="48" cy="48" r="42" fill="none" stroke="#233248" stroke-width="7"></circle>
+            <circle
+              id="ringArc"
+              cx="48"
+              cy="48"
+              r="42"
+              fill="none"
+              stroke="#2dd4bf"
+              stroke-width="7"
+              stroke-linecap="round"
+              stroke-dasharray={RING_CIRCUMFERENCE}
+              stroke-dashoffset={RING_CIRCUMFERENCE * (1 - reportScore / 100)}
+            ></circle>
+          </svg>
+          <b aria-hidden="true"><span><span id="scoreNum">{reportScore}</span><small>/100</small></span></b>
+        </div>
+        <div class="kpis">
+          <div class="kpi"><span>Fala do vendedor</span><b>68%</b></div>
+          <div class="kpi"><span>Intenção de compra</span><b>Alta</b></div>
+          <div class="kpi"><span>Objeção: preço</span><b class="teal">Contornada</b></div>
+          <div class="kpi"><span>Objeção: decisor</span><b class="rose">Não tratada</b></div>
+        </div>
+      </div>
+      <div class="timeline">
+        <div class="tl-bar">
+          <div class="tl-wave" id="tlWave" aria-hidden="true"></div>
+          <div class="tl-head" id="tlHead" hidden></div>
+          {findingPositions.map((position, index) => (
+            <span class:list={['tl-mark hit', findings[index]?.tone]} style={`left:${position}%`} aria-hidden="true"></span>
+          ))}
+        </div>
+        <div class="tl-scale"><span>00:00</span><span>{findings.length} pontos de atenção</span><span>41:58</span></div>
+      </div>
+      <div class="flist" id="flist" aria-live="polite">
+        {findings.map((finding, index) => {
+          const focused = index === initial.finding;
+          return (
+            <div class:list={['fi', focused ? 'focus' : 'locked']} aria-hidden={focused ? undefined : 'true'}>
+              <time class={finding.tone}>{finding.time}</time>
+              <div><Fragment set:html={finding.text} /><span class="rule">{finding.rule}</span></div>
+            </div>
+          );
+        })}
+      </div>
+      <p class="coach" id="coach" set:html={initial.coach} />
+      <button class="lockcta" type="button" data-open="demo" data-src="relatorio-bloqueado">
+        <StrokeIcon paths='<rect x="4" y="11" width="16" height="10" rx="2"/><path d="M8 11V7a4 4 0 0 1 8 0v4"/>' />
+        Veja o relatório completo no seu Raio-X
+      </button>
+      <p class="illus">EXEMPLO ILUSTRATIVO</p>
     </div>
   </div>
 </section>
+
+<script>
+  import '../../scripts/hero-background';
+  import '../../scripts/pain-selector';
+  import '../../scripts/report';
+</script>

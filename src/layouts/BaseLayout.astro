@@ -2,6 +2,7 @@
 import { Font } from 'astro:assets';
 import { PUBLIC_GA_ID, PUBLIC_GTM_ID, PUBLIC_META_PIXEL_ID } from 'astro:env/client';
 import '../styles/global.css';
+import SonarSymbol from '../components/SonarSymbol.astro';
 import { site } from '../data/site';
 
 interface Props {
@@ -30,7 +31,7 @@ const metaPixelId = PUBLIC_META_PIXEL_ID;
 ---
 
 <!doctype html>
-<html lang="pt-BR" class="scroll-smooth">
+<html lang="pt-BR">
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
@@ -38,7 +39,7 @@ const metaPixelId = PUBLIC_META_PIXEL_ID;
     <meta name="description" content={description} />
     <link rel="canonical" href={canonicalUrl} />
     <meta name="robots" content={noindex ? 'noindex, nofollow' : 'index, follow, max-image-preview:large'} />
-    <meta name="theme-color" content="#0d9488" />
+    <meta name="theme-color" content="#0a0f1a" />
     <meta name="generator" content={Astro.generator} />
 
     <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
@@ -61,7 +62,8 @@ const metaPixelId = PUBLIC_META_PIXEL_ID;
     <meta name="twitter:description" content={description} />
     <meta name="twitter:image" content={ogImageUrl} />
 
-    <Font cssVariable="--font-inter" preload />
+    <Font cssVariable="--font-manrope" preload />
+    <Font cssVariable="--font-plex-mono" />
 
     {structuredData.map((schema) => (
       <script type="application/ld+json" is:inline set:html={JSON.stringify(schema)} />
@@ -116,7 +118,8 @@ const metaPixelId = PUBLIC_META_PIXEL_ID;
       </script>
     )}
   </head>
-  <body class="bg-slate-50 font-sans text-slate-700 antialiased">
+  <body>
+    <SonarSymbol />
     {gtmId && (
       <noscript>
         <iframe

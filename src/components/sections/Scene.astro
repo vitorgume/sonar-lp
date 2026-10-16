@@ -1,0 +1,66 @@
+---
+import { sceneChoices } from '../../data/raio-x';
+---
+
+<section class="s s-alt" id="cena" aria-labelledby="h-cena">
+  <div class="wrap">
+    <div class="s-head">
+      <p class="label"><span class="dot"></span>A venda que escapou</p>
+      <h2 id="h-cena">Você é o vendedor. O que você diria aqui?</h2>
+      <p>Um momento de uma ligação real de vendas, reescrito. Escolha uma resposta e veja como o Sonar avalia.</p>
+    </div>
+    <div class="scene">
+      <div class="call">
+        <div class="call-h"><span class="rec"><i></i>LIGAÇÃO #4821 · 14:28</span><span>closer</span></div>
+        <div class="msgs">
+          <p class="msg c"><small>Cliente</small>Gostei bastante da proposta.</p>
+          <p class="msg c"><small>Cliente</small>Mas o valor ficou acima do que eu imaginava.</p>
+          <p class="msg v pending" id="vendLine"><small>Vendedor</small>…</p>
+        </div>
+        <div class="choices" role="group" aria-label="Respostas possíveis">
+          {sceneChoices.map((choice, index) => (
+            <button class="choice" type="button" data-choice={index} aria-pressed="false">
+              <b>{choice.key}</b><span>"{choice.line}"</span>
+            </button>
+          ))}
+        </div>
+      </div>
+      <div class="verdict wait" id="verdict" aria-live="polite">
+        <p class="label">Avaliação do Sonar</p>
+        <h3>Escolha uma resposta ao lado.</h3>
+        <p>O Sonar compara cada fala com o playbook da sua empresa e aponta o que aconteceu, a regra e o motivo.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<script>
+  import { sceneChoices } from '../../data/raio-x';
+  import { prefersReducedMotion, track } from '../../scripts/analytics';
+
+  const choices = Array.from(document.querySelectorAll<HTMLButtonElement>('[data-choice]'));
+  const sellerLine = document.getElementById('vendLine');
+  const verdict = document.getElementById('verdict');
+
+  choices.forEach((button) => {
+    button.addEventListener('click', () => {
+      const choice = sceneChoices[Number(button.dataset.choice)];
+      if (!choice || !sellerLine || !verdict) return;
+
+      choices.forEach((other) => other.setAttribute('aria-pressed', String(other === button)));
+      sellerLine.classList.remove('pending');
+      sellerLine.innerHTML = `<small>Vendedor</small>${choice.line}`;
+      verdict.classList.remove('wait');
+      verdict.innerHTML = `<p class="label">Avaliação do Sonar · 14:32</p><span class="chip ${choice.chip[0]}">${choice.chip[1]}</span><h3>${choice.heading}</h3><p>${choice.text}</p><p class="strong">Agora imagine isso em cada ligação do seu time.</p><button class="btn btn-primary" type="button" data-open="demo" data-src="cena">Quero meu Raio-X</button>`;
+      track('cena_resposta', { opcao: choice.key });
+
+      // No celular a avaliação fica abaixo das opções: leva o visitante até ela.
+      if (window.innerWidth <= 940) {
+        window.setTimeout(
+          () => verdict.scrollIntoView({ behavior: prefersReducedMotion() ? 'auto' : 'smooth', block: 'center' }),
+          60,
+        );
+      }
+    });
+  });
+</script>

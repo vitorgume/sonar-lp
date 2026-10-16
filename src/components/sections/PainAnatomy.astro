@@ -1,0 +1,28 @@
+---
+import { DEFAULT_PAIN, painKeys, pains } from '../../data/raio-x';
+
+const initial = pains[DEFAULT_PAIN];
+---
+
+<section class="s" id="dor" aria-labelledby="h-dor">
+  <div class="wrap">
+    <div class="s-head">
+      <p class="label">A dor por dentro</p>
+      <h2 id="h-dor"><span id="dorTitle">{initial.title}</span></h2>
+    </div>
+    <div class="pain-tabs" id="painTabs" role="group" aria-label="Trocar de dor">
+      {painKeys.map((key) => (
+        <button type="button" data-pain={key} aria-pressed={key === DEFAULT_PAIN ? 'true' : 'false'}>{pains[key].label}</button>
+      ))}
+    </div>
+    <div class="anatomy">
+      <div><p class="k">O que você vê</p><p class="v" id="aSint">{initial.symptom}</p></div>
+      <div class="cost"><p class="k">O que custa e ninguém mede</p><p class="v" id="aCusto">{initial.cost}</p></div>
+      <div class="ask">
+        <p class="k">A pergunta que fica</p>
+        <p class="v" id="aPerg">{initial.ask}</p>
+        <button class="btn btn-primary" type="button" data-open="demo" data-src="dor">Descobrir no meu Raio-X</button>
+      </div>
+    </div>
+  </div>
+</section>

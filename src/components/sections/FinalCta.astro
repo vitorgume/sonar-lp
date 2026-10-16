@@ -1,34 +1,20 @@
----
-import CircleCheck from '@lucide/astro/icons/circle-check';
-import LeadForm from '../LeadForm.astro';
-import { finalCta } from '../../data/content';
----
-
-<section aria-labelledby="cta-final-titulo" class="relative overflow-hidden bg-slate-900">
-  <div class="pointer-events-none absolute inset-0" aria-hidden="true">
-    <div class="absolute -top-32 -left-32 h-[32rem] w-[32rem] rounded-full bg-teal-500/15 blur-3xl"></div>
-  </div>
-
-  <div class="relative mx-auto grid max-w-7xl gap-12 px-4 py-20 sm:px-6 lg:grid-cols-12 lg:items-center lg:px-8 lg:py-28">
-    <div class="lg:col-span-6 xl:col-span-7">
-      <p class="text-sm font-semibold uppercase tracking-wider text-teal-400">{finalCta.eyebrow}</p>
-      <h2 id="cta-final-titulo" class="mt-3 text-3xl font-semibold tracking-tight text-white text-balance sm:text-4xl">
-        {finalCta.title}
-      </h2>
-      <p class="mt-4 max-w-xl text-lg text-slate-400 text-pretty">{finalCta.lead}</p>
-
-      <ul class="mt-8 space-y-3">
-        {finalCta.bullets.map((bullet) => (
-          <li class="flex items-start gap-3 text-slate-200">
-            <CircleCheck class="mt-0.5 h-5 w-5 shrink-0 text-teal-400" aria-hidden="true" />
-            <span>{bullet}</span>
-          </li>
-        ))}
-      </ul>
-    </div>
-
-    <div class="lg:col-span-6 xl:col-span-5">
-      <LeadForm idPrefix="final" headingLevel="h3" />
+<section class="s final" aria-labelledby="h-final" data-has-cta>
+  <div class="wrap">
+    <h2 id="h-final">Pare de gerenciar o time pela amostra.</h2>
+    <p>Cada ligação, ouvida. Cada vendedor, com direção clara.</p>
+    <div class="doors">
+      <div class="door main">
+        <p class="label"><span class="dot"></span>Recomendado</p>
+        <h3>Peça seu Raio-X das Ligações</h3>
+        <p>30 minutos, no seu cenário. Um especialista chama você no WhatsApp para combinar o horário.</p>
+        <button class="btn btn-primary" type="button" data-open="demo" data-src="final">Quero meu Raio-X</button>
+      </div>
+      <div class="door">
+        <p class="label">Ainda conhecendo</p>
+        <h3>Veja o Sonar em ação</h3>
+        <p>Uma demonstração gravada para assistir quando quiser. Sem ligação de vendas.</p>
+        <button class="btn btn-ghost" type="button" data-open="video" data-src="final">Assistir agora</button>
+      </div>
     </div>
   </div>
 </section>

@@ -1,0 +1,117 @@
+---
+import { Image } from 'astro:assets';
+import gumeLogo from '../../assets/brand/gume.png';
+import { clients, proof } from '../../data/content';
+
+// Altura de exibição dos logos (o CSS limita a 40px); a largura acompanha a proporção de cada arquivo.
+const LOGO_HEIGHT = 40;
+---
+
+<div class="proof">
+  <div class="wrap">
+    <div class="facts">
+      <span class="by-gume">
+        Um produto
+        <Image src={gumeLogo} alt="Gume Inteligência Comercial" width={87} height={28} densities={[1, 2]} />
+      </span>
+      {proof.facts.map((fact) => <span><b>{fact.strong}</b> {fact.text}</span>)}
+    </div>
+    <div class="integ" aria-label="Integrações">
+      <em>INTEGRA COM</em>
+      {proof.integrations.map((name) => <span>{name}</span>)}
+    </div>
+  </div>
+  <div class="clients" aria-labelledby="clients-lbl">
+    <p id="clients-lbl">{proof.clientsTitle}</p>
+    <div class="marquee" aria-label="Logos de clientes. Passe o mouse para pausar ou arraste para os lados.">
+      <ul>
+        {[0, 1].map((copy) =>
+          clients.map((client) => (
+            <li aria-hidden={copy === 1 ? 'true' : undefined}>
+              <Image
+                src={client.image}
+                alt={copy === 1 ? '' : client.name}
+                height={LOGO_HEIGHT}
+                densities={[1, 2]}
+                loading="eager"
+                decoding="async"
+              />
+            </li>
+          )),
+        )}
+      </ul>
+    </div>
+    <span class="marquee-hint">
+      <span class="t-mouse">Passe o mouse para pausar · arraste para navegar</span>
+      <span class="t-touch">Toque e arraste para navegar</span>
+    </span>
+  </div>
+</div>
+
+<script>
+  import { prefersReducedMotion, track } from '../../scripts/analytics';
+
+  // Faixa de clientes: corre para a direita, pausa no mouse, arrasta com o dedo.
+  const marquee = document.querySelector<HTMLElement>('.marquee');
+  const list = marquee?.querySelector<HTMLElement>('ul');
+
+  if (marquee && list) {
+    const SPEED = prefersReducedMotion() ? 0 : 38;
+    let half = 0;
+    let x = 0;
+    let velocity = 0;
+    let hover = false;
+    let last = performance.now();
+    let drag: { startX: number; originX: number; moved: boolean } | null = null;
+
+    const measure = (): void => {
+      half = list.scrollWidth / 2;
+      if (!x) x = -half;
+    };
+    const wrapAround = (): void => {
+      if (x > 0) x -= half;
+      if (x < -half) x += half;
+    };
+    const tick = (now: number): void => {
+      const dt = Math.min(0.05, (now - last) / 1000);
+      last = now;
+      if (!drag) {
+        const target = hover ? 0 : SPEED;
+        velocity += (target - velocity) * Math.min(1, dt * 4);
+        x += velocity * dt;
+      }
+      wrapAround();
+      list.style.transform = `translate3d(${x}px,0,0)`;
+      requestAnimationFrame(tick);
+    };
+
+    measure();
+    window.addEventListener('resize', measure);
+    // Os logos carregam depois do script: remede quando terminarem para o laço não "pular".
+    list.querySelectorAll('img').forEach((img) => img.addEventListener('load', measure, { once: true }));
+    requestAnimationFrame(tick);
+
+    marquee.addEventListener('mouseenter', () => (hover = true));
+    marquee.addEventListener('mouseleave', () => (hover = false));
+    marquee.addEventListener('pointerdown', (event) => {
+      drag = { startX: event.clientX, originX: x, moved: false };
+      marquee.classList.add('dragging');
+      marquee.setPointerCapture(event.pointerId);
+    });
+    marquee.addEventListener('pointermove', (event) => {
+      if (!drag) return;
+      const dx = event.clientX - drag.startX;
+      if (Math.abs(dx) > 3) drag.moved = true;
+      x = drag.originX + dx;
+    });
+    const end = (): void => {
+      if (!drag) return;
+      if (drag.moved) track('logos_arrastadas');
+      drag = null;
+      marquee.classList.remove('dragging');
+      velocity = 0;
+    };
+    marquee.addEventListener('pointerup', end);
+    marquee.addEventListener('pointercancel', end);
+  }
+</script>

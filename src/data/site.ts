@@ -13,17 +13,16 @@ export interface SiteConfig {
 export const site: SiteConfig = {
   name: 'Sonar',
   tagline: 'Sales Call Intelligence',
-  title: 'Sonar | Análise de ligações de vendas com IA para times comerciais',
+  title: 'Sonar | Raio-X das Ligações: análise de ligações de vendas com IA',
   description:
-    'Avalie 100% das ligações do seu time comercial com IA: nota de 0 a 100, objeções, concorrentes e feedback pronto para o 1:1. Integra com Pipedrive, PipeRun e Moskit.',
+    'O Sonar ouve 100% das ligações do seu time comercial, aplica o seu playbook e mostra o minuto exato em que a venda escapou.',
   ogImageAlt: 'Sonar — análise de ligações de vendas com inteligência artificial',
   legalName: 'Sonar',
   privacyEmail: 'vitorvieira@gumeinteligencia.com.br',
 };
 
 export const navLinks: { label: string; href: string }[] = [
-  { label: 'Como funciona', href: '#como-funciona' },
-  { label: 'Recursos', href: '#recursos' },
-  { label: 'Integrações', href: '#integracoes' },
-  { label: 'Dúvidas', href: '#duvidas' },
+  { label: 'Sua dor', href: '#dor' },
+  { label: 'Teste', href: '#teste' },
+  { label: 'O Raio-X', href: '#raio-x' },
 ];

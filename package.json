@@ -15,7 +15,6 @@
   "dependencies": {
     "@astrojs/node": "^11.1.6",
     "@astrojs/sitemap": "^3.7.4",
-    "@lucide/astro": "^1.48.0",
     "astro": "^7.3.5"
   },
   "devDependencies": {

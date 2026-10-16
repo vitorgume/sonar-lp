@@ -1,5 +1,15 @@
 import type { APIRoute } from 'astro';
 import { N8N_WEBHOOK_ATKEY, N8N_WEBHOOK_URL } from 'astro:env/server';
+import {
+  isPainKey,
+  isTeamSize,
+  pains,
+  quizLevels,
+  roleOptions,
+  type LeadInterest,
+  type QuizLevel,
+  type TeamSize,
+} from '../../data/raio-x';
 
 export const prerender = false;
 
@@ -17,20 +27,23 @@ interface LeadAttribution {
 
 interface LeadPayload {
   nome: string;
+  /** WhatsApp com DDD, só dígitos. */
   telefone: string;
-  email: string;
-  cargo: string;
   empresa: string;
-  tamanhoTimeComercial: number;
+  cargo: string;
+  tamanhoTimeComercial: TeamSize;
+  interesse: LeadInterest;
+  /** Dor escolhida na página, por extenso (ex.: "A meta não fecha"). */
+  dor: string;
+  resultadoTeste: QuizLevel | '';
+  ctaOrigem: string;
   consentimentoLgpd: boolean;
   origem: LeadAttribution;
   enviadoEm: string;
 }
 
 const UPSTREAM_TIMEOUT_MS = 10_000;
-const TEAM_SIZE_MIN = 1;
-const TEAM_SIZE_MAX = 9999;
-const EMAIL_PATTERN = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+const INTERESTS: LeadInterest[] = ['raio-x', 'video'];
 const ATTRIBUTION_KEYS: (keyof LeadAttribution)[] = [
   'utm_source',
   'utm_medium',
@@ -54,44 +67,53 @@ function text(value: unknown, maxLength: number): string {
   return typeof value === 'string' ? value.trim().slice(0, maxLength) : '';
 }
 
-/** Aceita número ou texto só com dígitos; qualquer outra coisa (decimal, notação científica, vazio) vira NaN. */
-function wholeNumber(value: unknown): number {
-  if (typeof value === 'number') return Number.isInteger(value) ? value : Number.NaN;
-  if (typeof value === 'string' && /^\d{1,6}$/.test(value.trim())) return Number(value.trim());
-  return Number.NaN;
-}
-
 /**
  * Remonta o lead campo a campo a partir do corpo recebido: nada que o navegador mande além do
  * contrato chega ao n8n, e os limites de tamanho valem mesmo para quem chamar a rota sem o formulário.
+ * Campos de lista fechada (cargo, tamanho, interesse, dor, teste) só aceitam os valores da própria LP.
  */
 function parseLead(body: unknown): LeadPayload | null {
   if (typeof body !== 'object' || body === null) return null;
   const input = body as Record<string, unknown>;
   const rawOrigem = (typeof input.origem === 'object' && input.origem !== null ? input.origem : {}) as Record<string, unknown>;
 
+  const cargo = text(input.cargo, 120);
+  const tamanho = input.tamanhoTimeComercial;
+  const interesse = input.interesse;
+  const dor = input.dor;
+  const resultadoTeste = text(input.resultadoTeste, 20);
+
+  if (
+    !roleOptions.includes(cargo) ||
+    !isTeamSize(tamanho) ||
+    !INTERESTS.includes(interesse as LeadInterest) ||
+    !isPainKey(dor) ||
+    (resultadoTeste !== '' && !quizLevels.includes(resultadoTeste as QuizLevel)) ||
+    input.consentimentoLgpd !== true
+  ) {
+    return null;
+  }
+
   const lead: LeadPayload = {
     nome: text(input.nome, 120),
     telefone: text(input.telefone, 20).replace(/\D/g, ''),
-    email: text(input.email, 160).toLowerCase(),
-    cargo: text(input.cargo, 120),
     empresa: text(input.empresa, 120),
-    tamanhoTimeComercial: wholeNumber(input.tamanhoTimeComercial),
-    consentimentoLgpd: input.consentimentoLgpd === true,
+    cargo,
+    tamanhoTimeComercial: tamanho,
+    interesse: interesse as LeadInterest,
+    dor: pains[dor].label,
+    resultadoTeste: resultadoTeste as QuizLevel | '',
+    ctaOrigem: text(input.ctaOrigem, 60),
+    consentimentoLgpd: true,
     origem: Object.fromEntries(ATTRIBUTION_KEYS.map((key) => [key, text(rawOrigem[key], 500)])) as unknown as LeadAttribution,
     enviadoEm: new Date().toISOString(),
   };
 
   const valid =
-    lead.nome.length >= 3 &&
+    lead.nome.length >= 2 &&
     lead.telefone.length >= 10 &&
     lead.telefone.length <= 11 &&
-    EMAIL_PATTERN.test(lead.email) &&
-    lead.cargo.length >= 2 &&
-    lead.empresa.length >= 2 &&
-    lead.tamanhoTimeComercial >= TEAM_SIZE_MIN &&
-    lead.tamanhoTimeComercial <= TEAM_SIZE_MAX &&
-    lead.consentimentoLgpd;
+    lead.empresa.length >= 2;
 
   return valid ? lead : null;
 }

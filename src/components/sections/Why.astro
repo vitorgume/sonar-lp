@@ -1,0 +1,15 @@
+---
+import { why } from '../../data/content';
+---
+
+<section class="s s-alt why-s" aria-labelledby="h-why">
+  <div class="wrap">
+    <div class="s-head">
+      <p class="label">Por que funciona</p>
+      <h2 id="h-why">{why.title}</h2>
+    </div>
+    <div class="why">
+      {why.items.map((item) => <div><b>{item.title}</b><span>{item.text}</span></div>)}
+    </div>
+  </div>
+</section>

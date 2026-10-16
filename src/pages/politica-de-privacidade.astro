@@ -9,7 +9,7 @@ interface PolicySection {
   paragraphs: string[];
 }
 
-const lastUpdate = '28 de setembro de 2026';
+const lastUpdate = '15 de outubro de 2026';
 
 const sections: PolicySection[] = [
   {
@@ -21,21 +21,22 @@ const sections: PolicySection[] = [
   {
     title: '2. Quais dados coletamos',
     paragraphs: [
-      'No formulário de contato: nome, telefone, e-mail, cargo, empresa e tamanho do time comercial.',
+      'Nos formulários da página (pedido do Raio-X das Ligações e acesso à demonstração gravada): nome, WhatsApp, empresa, cargo e quantidade de vendedores no time.',
+      'Junto com o formulário, registramos as escolhas feitas na página que ajudam a preparar a conversa: o desafio do time comercial que você selecionou e o resultado do teste do ponto cego, se você o fizer.',
       'Automaticamente: informações de origem da visita, como parâmetros de campanha (UTM), identificadores de clique de anúncios, página de entrada e página de referência. Se ferramentas de medição estiverem ativas, também podem ser coletados dados de navegação por meio de cookies.',
     ],
   },
   {
     title: '3. Para que usamos',
     paragraphs: [
-      'Usamos os dados para entrar em contato com você, entender o contexto da sua operação comercial, agendar e realizar a demonstração do Sonar e enviar informações comerciais relacionadas ao produto.',
+      'Usamos os dados para entrar em contato com você, inclusive pelo WhatsApp, entender o contexto da sua operação comercial, agendar e realizar o Raio-X das Ligações, liberar a demonstração gravada e enviar informações comerciais relacionadas ao produto.',
       'As informações de origem da visita servem para medir o desempenho das nossas campanhas de marketing.',
     ],
   },
   {
     title: '4. Base legal',
     paragraphs: [
-      'O tratamento dos dados do formulário se baseia no seu consentimento, fornecido ao marcar a caixa de aceite antes do envio, e em procedimentos preliminares relacionados a um possível contrato, conforme a Lei Geral de Proteção de Dados (Lei nº 13.709/2018).',
+      'O tratamento dos dados do formulário se baseia no seu consentimento, manifestado ao enviar o formulário após ser informado desta política, e em procedimentos preliminares relacionados a um possível contrato, conforme a Lei Geral de Proteção de Dados (Lei nº 13.709/2018).',
     ],
   },
   {
@@ -65,22 +66,21 @@ const sections: PolicySection[] = [
 
 <BaseLayout
   title="Política de Privacidade | Sonar"
-  description="Saiba como o Sonar coleta, usa e protege os dados pessoais enviados pelo formulário de contato, conforme a LGPD."
+  description="Saiba como o Sonar coleta, usa e protege os dados pessoais enviados pelos formulários da página, conforme a LGPD."
 >
   <Header variant="page" />
-  <main class="mx-auto max-w-3xl px-4 py-16 sm:px-6 sm:py-20 lg:px-8">
-    <h1 class="text-3xl font-semibold tracking-tight text-slate-900 sm:text-4xl">Política de Privacidade</h1>
-    <p class="mt-3 text-sm font-medium text-slate-500">Última atualização: {lastUpdate}</p>
-
-    <div class="mt-10 space-y-10">
-      {sections.map((section) => (
-        <section>
-          <h2 class="text-lg font-semibold text-slate-900">{section.title}</h2>
-          {section.paragraphs.map((paragraph) => (
-            <p class="mt-3 leading-relaxed text-slate-600">{paragraph}</p>
-          ))}
-        </section>
-      ))}
+  <main class="page">
+    <div class="wrap">
+      <p class="label">Última atualização: {lastUpdate}</p>
+      <h1>Política de Privacidade</h1>
+      <div class="prose">
+        {sections.map((section) => (
+          <section>
+            <h2>{section.title}</h2>
+            {section.paragraphs.map((paragraph) => <p>{paragraph}</p>)}
+          </section>
+        ))}
+      </div>
     </div>
   </main>
   <Footer variant="page" />

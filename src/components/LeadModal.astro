@@ -1,0 +1,95 @@
+---
+import LeadFields from './LeadFields.astro';
+import StrokeIcon from './ui/StrokeIcon.astro';
+import { DEFAULT_PAIN, pains } from '../data/raio-x';
+
+const spinner = '<path d="M21 12a9 9 0 1 1-6.22-8.56"/>';
+---
+
+<div class="modal" id="modal" role="dialog" aria-modal="true" aria-labelledby="mTitle" hidden>
+  <div class="sheet">
+    <button class="x" type="button" id="mClose" aria-label="Fechar">×</button>
+    <div class="progress" id="mProg" aria-hidden="true"><i></i><i></i></div>
+
+    <!-- A1: pedido do Raio-X -->
+    <div data-step="a1">
+      <h3 id="mTitle">Peça seu Raio-X das Ligações</h3>
+      <p class="sub">
+        Foco do seu Raio-X: <b id="mDor" class="teal">{pains[DEFAULT_PAIN].label.toLowerCase()}</b>. Leva 30 segundos.
+        Depois, um especialista chama você no WhatsApp para combinar o horário.
+      </p>
+      <form id="formA" data-lead-form="raio-x" novalidate>
+        <LeadFields prefix="a" />
+        <span class="err" data-form-error role="alert" hidden></span>
+        <button class="btn btn-primary" type="submit">
+          <span data-submit-label>Quero meu Raio-X</span>
+          <span data-submit-loading hidden><StrokeIcon class="spin" paths={spinner} strokeWidth={2.4} /> Enviando…</span>
+        </button>
+        <p class="legal">Ao continuar, você concorda com a <a href="/politica-de-privacidade" target="_blank">Política de Privacidade</a>.</p>
+      </form>
+    </div>
+
+    <!-- A-small: time de 1 a 3 -->
+    <div data-step="asmall" hidden>
+      <h3>Para times pequenos, comece pelo vídeo</h3>
+      <p class="sub">
+        Com até 3 vendedores, a demonstração gravada mostra tudo o que você precisa para avaliar o Sonar. Se quiser
+        conversar depois, é só responder no WhatsApp.
+      </p>
+      <div class="stack">
+        <button class="btn btn-primary" type="button" id="toVideo">Assistir à demonstração</button>
+        <button class="btn btn-ghost" type="button" id="toCal">Prefiro falar com um especialista</button>
+      </div>
+    </div>
+
+    <!-- A3: confirmado -->
+    <div data-step="a3" hidden>
+      <div class="done">
+        <div class="ok"><StrokeIcon paths='<path d="M5 12l5 5 9-10"/>' strokeWidth={2.6} /></div>
+        <h3 tabindex="-1">Pedido recebido</h3>
+        <p class="sub">Um especialista do Sonar vai chamar você no WhatsApp para combinar o melhor horário do seu Raio-X.</p>
+        <ul class="next">
+          <li><i></i><span><b>Agora</b>Recebemos seu pedido, com o foco que você escolheu.</span></li>
+          <li><i></i><span><b>Pelo WhatsApp</b>Um especialista chama você para combinar dia e horário.</span></li>
+          <li><i></i><span><b>No Raio-X</b>30 minutos por videochamada, com exemplos do seu segmento.</span></li>
+        </ul>
+      </div>
+    </div>
+
+    <!-- B1: dados para o vídeo -->
+    <div data-step="b1" hidden>
+      <h3>Veja o Sonar em ação</h3>
+      <p class="sub">Uma demonstração gravada, para assistir quando quiser. Sem ligação de vendas.</p>
+      <form id="formB" data-lead-form="video" novalidate>
+        <LeadFields prefix="b" />
+        <span class="err" data-form-error role="alert" hidden></span>
+        <button class="btn btn-primary" type="submit">
+          <span data-submit-label>Assistir agora</span>
+          <span data-submit-loading hidden><StrokeIcon class="spin" paths={spinner} strokeWidth={2.4} /> Enviando…</span>
+        </button>
+        <p class="legal">Ao continuar, você concorda com a <a href="/politica-de-privacidade" target="_blank">Política de Privacidade</a>.</p>
+      </form>
+    </div>
+
+    <!-- B2: vídeo liberado -->
+    <div data-step="b2" hidden>
+      <h3 tabindex="-1">O Sonar em ação</h3>
+      <div class="vid">
+        <video id="demoVid" src="/demo-gravada.mp4" poster="/poster-demo.jpg" controls playsinline preload="none"></video>
+      </div>
+      <p class="sub vid-cta">Quer ver isso com o roteiro do seu time?</p>
+      <button class="btn btn-primary" type="button" id="bToA">Quero meu Raio-X</button>
+    </div>
+  </div>
+</div>
+
+<aside class="nudge" id="nudge" aria-label="Convite">
+  <button class="x" type="button" id="nudgeX" aria-label="Fechar">×</button>
+  <b>Ainda conhecendo o Sonar?</b>
+  <p>Veja a demonstração gravada quando quiser. Sem ligação de vendas.</p>
+  <button class="btn btn-primary" type="button" data-open="video" data-src="convite-saida">Ver o Sonar em ação</button>
+</aside>
+
+<script>
+  import '../scripts/lead-modal';
+</script>

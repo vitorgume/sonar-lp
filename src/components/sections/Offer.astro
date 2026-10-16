@@ -1,0 +1,30 @@
+---
+import StrokeIcon from '../ui/StrokeIcon.astro';
+import { offer } from '../../data/content';
+---
+
+<section class="s offer-s" id="raio-x" data-has-cta aria-labelledby="h-oferta">
+  <div class="wrap offer">
+    <div class="s-head">
+      <p class="label"><span class="dot"></span>A oferta</p>
+      <h2 id="h-oferta">{offer.title}</h2>
+      <p>{offer.text}</p>
+    </div>
+    <div class="ticket">
+      <div class="ticket-h"><span>RAIO-X DAS LIGAÇÕES</span><span>SONAR</span></div>
+      <h3>O que você leva</h3>
+      <div class="meta">{offer.meta.map((item) => <span>{item}</span>)}</div>
+      <hr />
+      <ul class="takes">
+        {offer.items.map((item) => (
+          <li>
+            <span class="ic"><StrokeIcon paths={item.icon} /></span>
+            <div><b>{item.title}</b><span>{item.text}</span></div>
+          </li>
+        ))}
+      </ul>
+      <button class="btn btn-primary" type="button" data-open="demo" data-src="oferta">Quero meu Raio-X</button>
+      <p class="risk">{offer.risk}</p>
+    </div>
+  </div>
+</section>

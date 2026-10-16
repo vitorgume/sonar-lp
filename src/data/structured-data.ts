@@ -1,4 +1,4 @@
-import { faqs, features } from './content';
+import { faqs, featureList } from './content';
 import { site } from './site';
 
 export function buildHomeStructuredData(siteUrl: URL): Record<string, unknown>[] {
@@ -33,7 +33,7 @@ export function buildHomeStructuredData(siteUrl: URL): Record<string, unknown>[]
       applicationSubCategory: 'Análise de ligações de vendas',
       operatingSystem: 'Web',
       inLanguage: 'pt-BR',
-      featureList: features.items.map((feature) => feature.title),
+      featureList,
       publisher: { '@id': organizationId },
     },
     {
