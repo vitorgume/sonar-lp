@@ -53,6 +53,7 @@ if (modal) {
       if (field && !field.value) field.value = value;
     };
     set('nome', lead.nome);
+    set('email', lead.email);
     set('whatsapp', formatPhone(lead.telefone));
     set('empresa', lead.empresa);
     set('cargo', lead.cargo);

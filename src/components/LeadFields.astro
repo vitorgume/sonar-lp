@@ -27,6 +27,22 @@ const id = (name: string): string => `${prefix}${name}`;
     required
   />
 </div>
+<div class="f">
+  <label for={id('Email')}>E-mail</label>
+  <input
+    id={id('Email')}
+    name="email"
+    type="email"
+    inputmode="email"
+    autocomplete="email"
+    autocapitalize="none"
+    spellcheck="false"
+    enterkeyhint="next"
+    placeholder="voce@empresa.com.br"
+    maxlength="254"
+    required
+  />
+</div>
 <div class="row2">
   <div class="f">
     <label for={id('Whats')}>WhatsApp</label>

@@ -247,3 +247,8 @@ export const SMALL_TEAM: TeamSize = '1-3';
 export function isTeamSize(value: unknown): value is TeamSize {
   return teamSizes.some((size) => size.value === value);
 }
+
+/** Validação leve (algo@dominio.tld, sem espaços); a confirmação real do endereço fica com o n8n. */
+export function isEmail(value: string): boolean {
+  return value.length <= 254 && /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(value);
+}

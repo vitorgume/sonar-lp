@@ -1,6 +1,7 @@
 import type { APIRoute } from 'astro';
 import { N8N_WEBHOOK_ATKEY, N8N_WEBHOOK_URL } from 'astro:env/server';
 import {
+  isEmail,
   isPainKey,
   isTeamSize,
   pains,
@@ -27,6 +28,7 @@ interface LeadAttribution {
 
 interface LeadPayload {
   nome: string;
+  email: string;
   /** WhatsApp com DDD, só dígitos. */
   telefone: string;
   empresa: string;
@@ -96,6 +98,7 @@ function parseLead(body: unknown): LeadPayload | null {
 
   const lead: LeadPayload = {
     nome: text(input.nome, 120),
+    email: text(input.email, 254).toLowerCase(),
     telefone: text(input.telefone, 20).replace(/\D/g, ''),
     empresa: text(input.empresa, 120),
     cargo,
@@ -111,6 +114,7 @@ function parseLead(body: unknown): LeadPayload | null {
 
   const valid =
     lead.nome.length >= 2 &&
+    isEmail(lead.email) &&
     lead.telefone.length >= 10 &&
     lead.telefone.length <= 11 &&
     lead.empresa.length >= 2;

@@ -58,6 +58,7 @@ O repositório tem um `render.yaml` (Blueprint). Manualmente, crie um **Web Serv
 ```json
 {
   "nome": "João da Silva",
+  "email": "joao@empresa.com.br",
   "telefone": "11987654321",
   "empresa": "Empresa Ltda",
   "cargo": "Gerente ou coordenador comercial",
@@ -82,7 +83,8 @@ O repositório tem um `render.yaml` (Blueprint). Manualmente, crie um **Web Serv
 }
 ```
 
-- `telefone` é o **WhatsApp** informado, só com dígitos (DDD + número). O formulário não pede e-mail.
+- `email` é o e-mail informado, em minúsculas (validação leve de formato; obrigatório).
+- `telefone` é o **WhatsApp** informado, só com dígitos (DDD + número).
 - `cargo` é uma das opções da lista do formulário (`roleOptions` em `src/data/raio-x.ts`).
 - `tamanhoTimeComercial` é uma faixa, enviada como texto: `"1-3"`, `"4-10"`, `"11-30"` ou `"30+"`.
 - `interesse`: `"raio-x"` (pediu o Raio-X das Ligações, a conversa com especialista) ou `"video"` (preencheu para assistir à demonstração gravada).

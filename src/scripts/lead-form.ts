@@ -1,10 +1,11 @@
-import { isTeamSize, type LeadInterest, type TeamSize } from '../data/raio-x';
+import { isEmail, isTeamSize, type LeadInterest, type TeamSize } from '../data/raio-x';
 import { track } from './analytics';
 import { resolveAttribution, type LeadAttribution } from './attribution';
 import { leadContext } from './lead-context';
 
 export interface LeadPayload {
   nome: string;
+  email: string;
   telefone: string;
   empresa: string;
   cargo: string;
@@ -72,6 +73,7 @@ const digitsOf = (data: FormData, key: string): string => textOf(data, key).repl
 // Mesmas regras da rota /api/lead: o que passa aqui, passa lá.
 const FIELD_CHECKS: FieldCheck[] = [
   { name: 'nome', label: 'nome', valid: (data) => textOf(data, 'nome').length >= 2 },
+  { name: 'email', label: 'e-mail', valid: (data) => isEmail(textOf(data, 'email')) },
   {
     name: 'whatsapp',
     label: 'WhatsApp com DDD',
@@ -85,6 +87,7 @@ const FIELD_CHECKS: FieldCheck[] = [
 function buildPayload(data: FormData, interest: LeadInterest, ctaOrigin: string): LeadPayload {
   return {
     nome: textOf(data, 'nome'),
+    email: textOf(data, 'email').toLowerCase(),
     telefone: digitsOf(data, 'whatsapp'),
     empresa: textOf(data, 'empresa'),
     cargo: textOf(data, 'cargo'),
